@@ -8,3 +8,8 @@ I really love the phone app, it is beautiful, incredably nice to use, and I coul
 
 ## Goals & Solution
 My primary goals for this project are to buff my portfolio, and learn. This is a relatively large endevor due to the fact that I have very little time to work on this so the timeframe is undefined however by the end of it I want to have a fully functional desktop alternative to Google tasks that feels like Google could have made it.
+
+## Discovery
+On loading the app (viewed from gmail) you are greeted with this:
+
+![On first launch]("https://github.com/alexa-griffin/google-tasks-redesign/tree/master/process/discovery/on-first-launch.png")
