@@ -13,3 +13,42 @@ My primary goals for this project are to buff my portfolio, and learn. This is a
 On loading the app (viewed from gmail) you are greeted with this:
 
 ![On first launch](./discovery/on-first-launch.png)
+
+I am going to go ahead and assume that the lack of any greeting was due to the my previous expirements with this app. This shows a nice illustration with very clear actions a user could take:
+
+* add a task
+* close the sidebar (this is still gmail)
+* show a dropdown of the all lists a user has.
+* get more options.
+
+This is incredibly simple by design.
+
+Adding a task does a little animation to transition from wide sholdered cake man to a functional application. A simple text box in which to add a task is shown with the hallmarks of a "task item" such as the unchecked circle and editing menu button.
+
+Upon clicking this button you are taken to this page that shows all the options you are given to provide more context to your task. Once again I note the simplicity of this design. Nothing is too overbearing, just 2 simple text fields, a dropdown, date picker, and a way of creating subtasks.
+
+![Edit task](./discovery/edit-task.png)
+
+When creating a subtask the "task item" ui theme is kept consistent.
+
+![Subtask](discovery/subtask.png)
+
+This is the same component with a few noticeable changes: 
+* there is no edit menu
+* there is a helpful little arrow
+* there are two small breaks in the circle at lower resolutions
+    I am not sure if this is intentional or simply a rendering glitch as it only shows when my monitor is in 1080p. I am going to treat it as such
+
+When returning to the main menu the subtask is shown nested below the parent task.
+
+![Subtask Main](discovery/subtask-main.png)
+
+When adding details to the parent task those are also shown in the task list.
+
+![Details](discovery/details-and-subtask.png)
+
+When adding a date to the task that is also shown.
+
+![Date](discovery/date.png)
+
+At this point there is quite a bit of data shown here and it is still not really overwhelming and easily scanable. But this is about it for this app. This is the meat of what it does. There are several other features such as keyboard shortcuts that improve the poweruser's expirence. However this is really most of it.
