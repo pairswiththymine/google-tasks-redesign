@@ -12,4 +12,4 @@ My primary goals for this project are to buff my portfolio, and learn. This is a
 ## Discovery
 On loading the app (viewed from gmail) you are greeted with this:
 
-![On first launch]("https://github.com/alexa-griffin/google-tasks-redesign/tree/master/process/discovery/on-first-launch.png")
+![On first launch](./discovery/on-first-launch.png)
