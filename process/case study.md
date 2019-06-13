@@ -52,3 +52,13 @@ When adding a date to the task that is also shown.
 ![Date](discovery/date.png)
 
 At this point there is quite a bit of data shown here and it is still not really overwhelming and easily scanable. But this is about it for this app. This is the meat of what it does. There are several other features such as keyboard shortcuts that improve the poweruser's expirence. However this is really most of it.
+
+Typically the next step would have been to identify user personas, and other such planning phases. However my goal was not to redesign google tasks, it was to recreate the mobile version for desktop. So I do not want to add any extra features (despite there being a few that I would really like.) So knowing this I jumped straight to some brainstorming.
+
+![Brainstorming](discovery/brainstorming.png)
+
+In this process I came accross a few things of note: first is that due to the amount of data being displayed, a desktop version of this application is really unnecessary. I found this when doing some of the first drafts, I took the approch of every other desktop todo app on the planet, a list to the left with details in the main container. This is not ideal, as it looks like and behaves just like the gmail version except it can show the main task list at the same time. Next I tried moving the task list to the center, and having a detail popup, once again this struck me as shockingly similar to the original design. However this gave me an idea, in the original application the concept of a "task item" was a unifying feature. So I thought about constructing this into both the task and the details. The primary advantage to having a desktop design is screen realistate. So what if I expanded the task item into a more detailed view. Then I realized that I can simply always show details while having the list layed out similar to Google keep
+
+![keep](discovery/keep.png)
+
+Now each task could be a task that could be minimized. This allows for a simple overview of your tasks and a space effective design. Alternately I could make it as tasks are minimized by default, however I believe that will come in higher fidelity prototypes.
