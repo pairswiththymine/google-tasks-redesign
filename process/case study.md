@@ -82,3 +82,14 @@ I prefer to use raw html to create low fidelity prototypes and wireframes. I fin
 [The wireframe](https://s.codepen.io/Alexa42/debug/pXjrZq/VGkWNwmPobjA)
 
 Obviously there is *a lot* wrong with this. Primarily the issues consist of the jaring transition between showing details of a task and them being hidden. Furthermore the grid system really needs to be more robust. However it gets across the general idea I am going for: a header with all of the standard Google things, a sidebar with task lists, and the tasks front and center.
+
+
+## high fidelity prototype
+
+Next comes my favorite part: making it all look pretty. Because I am designing this not only following the material 2.0 guidelines, but also attempting to look as though Google created this app. Thus their specific imagining of material 2.0 is what I will be attempting to recreate.
+
+![mockup](design/initial-mockup.png)
+
+[link](https://s.codepen.io/Alexa42/debug/zVvEZK/VJrxxVBeqDyr)
+
+There are several things of note here, firstly I am using Product Sans as the font instead of Google Sans, next there is no actual data going in here, it is just static html with styles.
