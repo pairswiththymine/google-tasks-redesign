@@ -1,11 +1,13 @@
 <template>
   <div class="landing">
-    <h1>Google Tasks Desktop</h1>
-    <div class="cta">
-      <button class="auth">Go to application</button>
-      <a href="https://github.com/alexa-griffin/google-tasks-redesign">See the source</a>
+    <div>
+      <h1>Google Tasks Desktop</h1>
+      <div class="cta">
+        <button class="auth">Go to application</button>
+        <a href="https://github.com/alexa-griffin/google-tasks-redesign">See the source</a>
+      </div>  
     </div>
-    <img src="../assets/dude.svg" alt="">
+    <div class="img"></div>
     <p class="disclaimer">This product is not made, or endorsed by Google.</p>
   </div>
 </template>
@@ -20,17 +22,33 @@ export default {
 
 .landing {
   height: 100vh;
-  width: 95%;
+  width: 50%;
   max-width: 960px;
-  margin: 0 auto;
+  margin: 0 45% 0 5%;
   font-family: $main-font;
   overflow: hidden;
   display: flex;
-  justify-content: center;
-  flex-direction: column;
+  align-items: center;
+  // flex-direction: column;
+  >div {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;    
+  }
+  .img {
+    position: absolute;
+    right: 0;
+
+    background-image: url("../assets/dude.svg");
+    background-size: contain;
+    background-position: right;
+    background-repeat: no-repeat;
+    width: 50%;
+    height: 100%;
+  }
   h1 {
-    font-size: 3rem;
-    margin-bottom: 2rem;
+    font-size: 4rem;
+    margin-bottom: 3rem;
   }
   .cta {
     display: flex;
@@ -67,9 +85,7 @@ export default {
   .disclaimer {
     position: absolute;
     bottom: 16px;
-    left: 0;
-    width: 100%;
-    text-align: center;
+    width: 50%;
   }
 }
 </style>
