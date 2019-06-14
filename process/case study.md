@@ -83,6 +83,7 @@ I prefer to use raw html to create low fidelity prototypes and wireframes. I fin
 
 Obviously there is *a lot* wrong with this. Primarily the issues consist of the jaring transition between showing details of a task and them being hidden. Furthermore the grid system really needs to be more robust. However it gets across the general idea I am going for: a header with all of the standard Google things, a sidebar with task lists, and the tasks front and center.
 
+---
 
 ## high fidelity prototype
 
@@ -92,4 +93,15 @@ Next comes my favorite part: making it all look pretty. Because I am designing t
 
 [link](https://s.codepen.io/Alexa42/debug/zVvEZK/VJrxxVBeqDyr)
 
-There are several things of note here, firstly I am using Product Sans as the font instead of Google Sans, next there is no actual data going in here, it is just static html with styles.
+There are several things of note here, firstly I am using Product Sans as the font instead of Google Sans, next there is no actual data going in here, it is just static html with styles. So the problem of the jaring transition between the non-detailed and detailed view still exists. However this represents what I had in my head when designing the wireframe.
+
+---
+
+## Final prototype
+
+I could just leave it here, this helped my design skills quite a bit and I am very happy with the result. However I would like to make this into a fully functional applicaiton. So because I have no self control and this sounds fun I am going to do that.
+
+### Tech stack
+
+Typically I would use react for this kind of thing because it is simple, easy, and I already know it. However because I am doing this as though I am a Google engineer I will instead be using [polymer](https://www.polymer-project.org/). A technology I have never used before and only know by name and that 
+Google uses it.
