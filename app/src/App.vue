@@ -5,15 +5,10 @@
 <script>
 export default {
   name: 'App',
-  data() { return {
-    prop: "hecl",
-    num: 0
-  }},
 }
 </script>
 
 <style lang="scss">
-
 @import "./_style.scss";
 
 * {
@@ -28,5 +23,4 @@ body {
   background-color: $main;
   color: rgba(#fff, 0.95);
 }
-
 </style>

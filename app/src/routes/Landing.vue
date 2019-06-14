@@ -15,6 +15,7 @@
 
 <script>
 export default {
+  name: "Landing",
 }
 </script>
 
@@ -30,7 +31,6 @@ export default {
   overflow: hidden;
   display: flex;
   align-items: center;
-  // flex-direction: column;
   >div {
     display: flex;
     justify-content: center;
@@ -40,7 +40,7 @@ export default {
     position: absolute;
     right: 0;
 
-    background-image: url("../assets/dude.svg");
+    background-image: url("../assets/hero.svg");
     background-size: contain;
     background-position: right;
     background-repeat: no-repeat;
