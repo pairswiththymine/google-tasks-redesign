@@ -4,11 +4,12 @@
       <h1>Google Tasks Desktop</h1>
       <div class="cta">
         <button class="auth">Go to application</button>
-        <a href="https://github.com/alexa-griffin/google-tasks-redesign">See the source</a>
+        <a href="https://github.com/alexa-griffin/google-tasks-redesign" target="_blank">See the source</a>
+        <a href="https://github.com/alexa-griffin/google-tasks-redesign/blob/master/process/case%20study.md" target="_blank">Read the case study</a>
       </div>  
     </div>
     <div class="img"></div>
-    <p class="disclaimer">This product is not made, or endorsed by Google.</p>
+    <p class="disclaimer">This application is not made, or endorsed by Google.</p>
   </div>
 </template>
 
@@ -49,6 +50,7 @@ export default {
   h1 {
     font-size: 4rem;
     margin-bottom: 3rem;
+    letter-spacing: 0.1rem;
   }
   .cta {
     display: flex;
@@ -77,6 +79,7 @@ export default {
       font-size: 1.1rem;
       border-radius: 8px;
       padding: 6px;
+      transition: all ease-in-out 0.1s;
       &:hover {
         background-color: $alt-background;
       }
