@@ -1,18 +1,23 @@
 import Vue from 'vue'
 import VueRouter from "vue-router"
 
-import App from './App.vue'
-
-import routes from "./routes.js"
+import App from "./routes/App.vue"
+import Dog from "./routes/Dog.vue"
 
 Vue.config.productionTip = false
 Vue.use(VueRouter)
 
 const router = new VueRouter({
-  routes
+  mode: "history",
+  routes: [
+    { path: '/dog', component: Dog }
+  ]
 })
 
-new Vue({
+const app = new Vue({
   router,
   render: h => h(App),
 }).$mount('#app')
+
+window.app = app
+window.router = router

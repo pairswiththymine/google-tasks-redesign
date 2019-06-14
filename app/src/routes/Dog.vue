@@ -1,15 +1,13 @@
 <template>
-  <header>
-    <h1>hi</h1>
-  </header>
+  <h1>dog</h1>
 </template>
 
 <script>
 export default {
-  name: "Header",
+  name: "Dog"  
 }
 </script>
 
-<style scoped>
+<style>
 
 </style>

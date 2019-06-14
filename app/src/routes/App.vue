@@ -1,24 +1,24 @@
 <template>
   <div id="app">
     <Header />
-    <p v-on:click="num += 4">hello world {{ num }}</p>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import Header from "./components/Header.vue"
+import Header from "../components/Header.vue"
 
 export default {
   name: 'app',
   components: {
     Header
   },
-  data: () => ({
+  data() { return {
     prop: "hecl",
     num: 0
-  }),
+  }},
   created() {
-    console.log(this.$data.prop)
+    console.log(this)
   }
 }
 </script>
