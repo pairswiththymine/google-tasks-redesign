@@ -4,6 +4,8 @@ import VueRouter from "vue-router"
 import App from "./routes/App.vue"
 import Dog from "./routes/Dog.vue"
 
+import "./api.js"
+
 Vue.config.productionTip = false
 Vue.use(VueRouter)
 
@@ -14,10 +16,7 @@ const router = new VueRouter({
   ]
 })
 
-const app = new Vue({
+new Vue({
   router,
   render: h => h(App),
 }).$mount('#app')
-
-window.app = app
-window.router = router
