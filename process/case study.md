@@ -103,5 +103,4 @@ I could just leave it here, this helped my design skills quite a bit and I am ve
 
 ### Tech stack
 
-Typically I would use react for this kind of thing because it is simple, easy, and I already know it. However because I am doing this as though I am a Google engineer I will instead be using [polymer](https://www.polymer-project.org/). A technology I have never used before and only know by name and that 
-Google uses it.
+Typically I would use react for this kind of thing because it is simple, easy, and I already know it. ~~However because I am doing this as though I am a Google engineer I will instead be using [polymer](https://www.polymer-project.org/). A technology I have never used before and only know by name and that Google uses it.~~ Actually I am just going to use vue because I want to actually make this.
