@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import VueRouter from "vue-router"
 
-import App from "./routes/App.vue"
-import Dog from "./routes/Dog.vue"
+import App from "./App.vue"
+import Landing from "./routes/Landing.vue"
 
 import "./api.js"
 
@@ -12,7 +12,7 @@ Vue.use(VueRouter)
 const router = new VueRouter({
   mode: "history",
   routes: [
-    { path: '/dog', component: Dog }
+    { path: '/', component: Landing }
   ]
 })
 
