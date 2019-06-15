@@ -7,7 +7,7 @@
           v-for="taskList in taskLists" 
           v-bind:key="taskList.id" 
           v-bind:class="'task-list ' + (taskList.id === active ? 'active' : '')"
-          v-on:click="active = taskList.id"
+          v-on:click="setActiveList(taskList.id)"
         >
           {{ taskList.title }}
         </li>
@@ -15,13 +15,16 @@
       </ul>
     </aside>
     <main>
-      <div class="lists" v-if="activeTasks || completeTasks">
+      <div class="lists" v-if="activeTasks">
         <task-item 
           v-for="task in activeTasks"
           v-bind:key="task.id"
           v-bind:task="task"
         />
       </div>
+      <div 
+        v-else 
+        v-bind:class="'bg ' + (!activeTasks ? 'zero-state' : '')"></div>
     </main>
   </div>
 </template>
@@ -43,6 +46,14 @@ export default {
     activeTasks: null,
     completeTasks: null,
   }),
+  methods: {
+    setActiveList(id) {
+      this.active = id
+      api.getTasks(this.active).then(res => {
+        this.activeTasks = res.items
+      }, console.error)
+    }
+  },
   created() {
     if(!api.authed()) this.$router.push("/")
     else {
@@ -50,7 +61,6 @@ export default {
         this.taskLists = res.items
         this.active = res.items[0].id
         api.getTasks(this.active).then(res => {
-          console.log(res)
           this.activeTasks = res.items
         }, console.error)
       }, console.error)
@@ -104,6 +114,16 @@ main {
     padding-top: 32px;
     display: grid;
     grid-template-columns: 50% 50%;
+  }
+  .bg {
+    height: calc(100vh - 64px);
+    width: 100%;
+    background-size: 20%;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  .zero-state {
+    background-image: url("../assets/zero-state.svg");
   }
 }
 </style>
