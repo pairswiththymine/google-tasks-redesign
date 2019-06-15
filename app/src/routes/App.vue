@@ -3,7 +3,14 @@
     <Header />
     <aside>
       <ul v-if="taskLists">
-        <li v-for="taskList in taskLists" v-bind:key="taskList.id" v-bind:class="taskLists.indexOf(taskList) === active ? 'active' : ''">{{ taskList.title }}</li>
+        <li 
+          v-for="taskList in taskLists" 
+          v-bind:key="taskList.id" 
+          v-bind:class="taskList.id === active ? 'active' : ''"
+          v-on:click="active = taskList.id"
+        >
+          {{ taskList.title }}
+        </li>
       </ul>
     </aside>
   </div>
@@ -20,15 +27,14 @@ export default {
   },
   data: () => ({
     taskLists: null,
-    active: 0
+    active: null
   }),
   created() {
     if(!api.authed()) this.$router.push("/")
     else {
       api.getTaskLists().then(res => {
         this.taskLists = res.items
-        console.log(this)
-        console.log(res)
+        this.active = res.items[0].id
       }, console.error)
     }
   }
