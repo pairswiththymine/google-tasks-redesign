@@ -181,6 +181,9 @@ main {
         width: 42px;
         position: relative;
         cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         &::after {
           content: "";
           position: absolute;
@@ -196,15 +199,17 @@ main {
         span {
           position: absolute;
           bottom: 0;
-          left: -50%;
           border-radius: 2px;
           background-color: #222;
           color: rgba(255, 255, 255, 0.85);
           opacity: 0;
           padding: 4px 6px;
           white-space: nowrap;
-          transition: 0.3s all ease-in-out;
+          transition: 0.2s opacity ease-in-out, 0.2s bottom ease-in-out, 0.1s max-width ease-in-out;
           pointer-events: none;
+          overflow: hidden;
+          width: auto;
+          max-width: 0;
         }
         &:hover {
           ::after {
@@ -213,10 +218,10 @@ main {
             width: 100%;
             height: 100%;
           }
-
           span {
             opacity: 1;
             bottom: -50%;
+            max-width: 1000px;
           }
         }
       }
