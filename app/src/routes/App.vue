@@ -259,7 +259,7 @@ main {
           max-width: 0;
         }
         &:hover {
-          ::after {
+          &::after {
             top: 0;
             left: 0;
             width: 100%;
