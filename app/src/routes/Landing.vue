@@ -3,7 +3,7 @@
     <div>
       <h1>Google Tasks Desktop</h1>
       <div class="cta">
-        <button class="auth">Go to application</button>
+        <button class="auth" v-on:click="auth">Go to application</button>
         <a href="https://github.com/alexa-griffin/google-tasks-redesign" target="_blank">See the source</a>
         <a href="https://github.com/alexa-griffin/google-tasks-redesign/blob/master/process/case%20study.md" target="_blank">Read the case study</a>
       </div>  
@@ -14,8 +14,20 @@
 </template>
 
 <script>
+
+import api from "../api.js"
+window.api = api
+
 export default {
   name: "Landing",
+  methods: {
+    auth() {
+      api.auth().then(res => {
+        console.log(res)
+        this.$router.go("/app/")
+      })      
+    }
+  }
 }
 </script>
 

@@ -2,7 +2,6 @@
 // gapi defined in html
 // all other files should not have to access gapi directly
 
-
 const SCOPE = ['https://www.googleapis.com/auth/tasks']
 
 export default {
@@ -11,6 +10,6 @@ export default {
   },
 
   auth() {
-    gapi.auth.authorize({ client_id: process.env.VUE_APP_CLIENT_ID, scope: SCOPE })
+    return gapi.auth.authorize({ client_id: process.env.VUE_APP_CLIENT_ID, scope: SCOPE })
   }
 }
