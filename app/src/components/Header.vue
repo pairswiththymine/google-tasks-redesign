@@ -27,7 +27,7 @@ header {
   border-bottom: 1px solid $alt-background;
   display: flex;
   align-items: center;
-
+   font-family: $main-font;
   >a {
     margin-left: 16px;
     display: flex;

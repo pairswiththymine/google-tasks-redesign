@@ -6,7 +6,7 @@
 import api from "./api.js"
 
 export default {
-  name: 'App',
+  name: 'Container',
   mounted() {
     document.addEventListener("DOMContentLoaded", e => {
       api.init()
