@@ -90,11 +90,12 @@ export default {
       const task = {
         title: e.target.value
       }
+      e.target.value = ""
+      e.target.blur()
       this.activeTasks.splice(0, 0, task) // to make the insertion into the visual list instant
       api.createTask(this.active, task).then(res => {
         this.getTasks()
       })
-      console.log(e.target.value)
     },
     getTaskLists(cb) {
       return api.getTaskLists().then(res => {
