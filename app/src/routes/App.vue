@@ -16,9 +16,17 @@
     </aside>
     <main>
       <div class="actions">
-        <input type="text" v-on:keydown.enter="addTask">
-        <button v-on:click="showCompleted = !showCompleted">toggle completed</button>
-        <button v-on:click="showActive = !showActive">toggle active</button>
+        <input type="text" v-on:keydown.enter="addTask" placeholder="add a task">
+        <div>
+          <button v-on:click="showCompleted = !showCompleted">
+            <span>{{showCompleted ? "hide" : "show"}} completed</span>
+            <img src="../assets/done.svg" alt="toggle completed">
+          </button>
+          <button v-on:click="showActive = !showActive">
+            <span>{{showActive ? "hide" : "show"}} active</span>
+            <img src="../assets/list.svg" alt="toggle active">
+          </button>
+        </div>
       </div>
         <div v-if="shownTasks.length" class="lists">
           <task-item
@@ -144,10 +152,80 @@ main {
   margin-left: 300px;
   margin-top: 64px;
   font-family: $main-font;
+  .actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 90%;
+    margin: 0 auto;
+    padding: 32px 0 8px;
+    input {
+      width: 60%;
+      max-width: 480px;
+      padding: 8px;
+      border-radius: 8px;
+      outline: none;
+      border: none;
+      margin: 0 8px;
+      font-size: 1.1rem;
+      box-shadow: 0 1px 2px 0 rgba(60,64,67,0.302), 0 1px 3px 1px rgba(60,64,67,0.149);
+    }
+    >div {
+      button {
+        margin: 0 8px;
+        border-radius: 50%;
+        background-color: transparent;
+        outline: none;
+        border: none;
+        height: 42px;
+        width: 42px;
+        position: relative;
+        cursor: pointer;
+        &::after {
+          content: "";
+          position: absolute;
+          z-index: -1;
+          border-radius: 50%;
+          top: 50%;
+          left: 50%;
+          width: 0;
+          height: 0;
+          background-color: $alt-background;
+          transition: 0.05s all ease-in-out;
+        }
+        span {
+          position: absolute;
+          bottom: 0;
+          left: -50%;
+          border-radius: 2px;
+          background-color: #222;
+          color: rgba(255, 255, 255, 0.85);
+          opacity: 0;
+          padding: 4px 6px;
+          white-space: nowrap;
+          transition: 0.3s all ease-in-out;
+          pointer-events: none;
+        }
+        &:hover {
+          ::after {
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+          }
+
+          span {
+            opacity: 1;
+            bottom: -50%;
+          }
+        }
+      }
+    }
+  }
   .lists {
     width: 90%;
     margin: 0 auto;
-    padding-top: 32px;
+    padding-top: 8px;
     display: grid;
     grid-template-columns: 50% 50%;
   }
