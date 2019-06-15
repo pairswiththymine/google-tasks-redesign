@@ -6,28 +6,42 @@
         <li 
           v-for="taskList in taskLists" 
           v-bind:key="taskList.id" 
-          v-bind:class="taskList.id === active ? 'active' : ''"
+          v-bind:class="'task-list ' + (taskList.id === active ? 'active' : '')"
           v-on:click="active = taskList.id"
         >
           {{ taskList.title }}
         </li>
+        <li class="break"></li>
       </ul>
     </aside>
+    <main>
+      <div class="lists" v-if="activeTasks || completeTasks">
+        <task-item 
+          v-for="task in activeTasks"
+          v-bind:key="task.id"
+          v-bind:task="task"
+        />
+      </div>
+    </main>
   </div>
 </template>
 
 <script>
 import Header from "../components/Header.vue"
+import TaskItem from "../components/task-item.vue"
 import api from "../api.js"
 
 export default {
   name: "app",
   components: {
-    Header
+    Header,
+    TaskItem
   },
   data: () => ({
     taskLists: null,
-    active: null
+    active: null,
+    activeTasks: null,
+    completeTasks: null,
   }),
   created() {
     if(!api.authed()) this.$router.push("/")
@@ -35,6 +49,10 @@ export default {
       api.getTaskLists().then(res => {
         this.taskLists = res.items
         this.active = res.items[0].id
+        api.getTasks(this.active).then(res => {
+          console.log(res)
+          this.activeTasks = res.items
+        }, console.error)
       }, console.error)
     }
   }
@@ -55,16 +73,37 @@ aside {
   ul {
     list-style: none;
     padding-left: 0;
-    li {
+    .task-list {
       border-top-right-radius: 5000px;
       border-bottom-right-radius: 5000px;
-      padding: 8px;
-      margin: 8px 0;
+      padding: 12px 32px;
+      margin: 12px 0;
+      font-size: 1.1rem;
+      background-color: transparent;
+      transition: 0.1s background-color ease-in-out;
       cursor: pointer;
       &.active, &:hover {
         background-color: $alt-background;
       }
     }
+    .break {
+      height: 2px;
+      width: 100%;
+      background-color: $alt-background;
+    }
+  }
+}
+
+main {
+  margin-left: 300px;
+  margin-top: 64px;
+  font-family: $main-font;
+  .lists {
+    width: 90%;
+    margin: 0 auto;
+    padding-top: 32px;
+    display: grid;
+    grid-template-columns: 50% 50%;
   }
 }
 </style>
