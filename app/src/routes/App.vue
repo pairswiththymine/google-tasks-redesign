@@ -19,26 +19,17 @@
         <button v-on:click="showCompleted = !showCompleted">toggle completed</button>
         <button v-on:click="showActive = !showActive">toggle active</button>
       </div>
-        <div v-if="showActive" class="lists">
+        <div v-if="shownTasks.length" class="lists">
           <task-item
-            v-for="task in activeTasks"
+            v-for="task in shownTasks"
             v-bind:key="task.id"
             v-bind:task="task"
           />
         </div>
-        <div v-if="showCompleted" class="lists">
-          <task-item
-            v-for="task in completeTasks"
-            v-bind:key="task.id"
-            v-bind:task="task"
-          />
-        </div>
-      <div 
-        v-if="!showCompleted && !activeTasks.length" 
-        class="bg zero-state"></div>
-      <div 
-        v-else-if="showActive && !activeTasks.length" 
-        class="bg completed"></div>
+        <div 
+          v-else
+          v-bind:class="'bg ' + (!activeTasks.length && completeTasks.length) ? 'completed' : 'zero-state'"
+        ></div>
     </main>
   </div>
 </template>
@@ -59,8 +50,9 @@ export default {
     active: null,
     activeTasks: null,
     completeTasks: null,
+    showActive: true,
     showCompleted: false,
-    showActive: true
+    shownTasks: []
   }),
   methods: {
     setActiveList(id) {
@@ -68,7 +60,20 @@ export default {
       api.getTasks(this.active).then(res => {
         this.activeTasks = res.items
       }, console.error)
+    },
+    getShownTasks() {
+      this.shownTasks = []
+      if(this.showActive) this.shownTasks = this.shownTasks.concat(this.activeTasks)
+      if(this.showCompleted) this.shownTasks = this.shownTasks.concat(this.completeTasks)
+
+      console.log(this.shownTasks)
     }
+  },
+  watch: {
+    activeTasks: function() { this.getShownTasks() },
+    completeTasks: function() { this.getShownTasks() },
+    showCompleted: function() { this.getShownTasks() },
+    showActive: function() { this.getShownTasks() },
   },
   created() {
     if(!api.authed()) this.$router.push("/")
