@@ -15,16 +15,30 @@
       </ul>
     </aside>
     <main>
-      <div class="lists" v-if="activeTasks">
-        <task-item 
-          v-for="task in activeTasks"
-          v-bind:key="task.id"
-          v-bind:task="task"
-        />
+      <div>
+        <button v-on:click="showCompleted = !showCompleted">toggle completed</button>
+        <button v-on:click="showActive = !showActive">toggle active</button>
       </div>
+        <div v-if="showActive" class="lists">
+          <task-item
+            v-for="task in activeTasks"
+            v-bind:key="task.id"
+            v-bind:task="task"
+          />
+        </div>
+        <div v-if="showCompleted" class="lists">
+          <task-item
+            v-for="task in completeTasks"
+            v-bind:key="task.id"
+            v-bind:task="task"
+          />
+        </div>
       <div 
-        v-else 
-        v-bind:class="'bg ' + (!activeTasks ? 'zero-state' : '')"></div>
+        v-if="!showCompleted && !activeTasks.length" 
+        class="bg zero-state"></div>
+      <div 
+        v-else-if="showActive && !activeTasks.length" 
+        class="bg completed"></div>
     </main>
   </div>
 </template>
@@ -45,6 +59,8 @@ export default {
     active: null,
     activeTasks: null,
     completeTasks: null,
+    showCompleted: false,
+    showActive: true
   }),
   methods: {
     setActiveList(id) {
@@ -61,7 +77,9 @@ export default {
         this.taskLists = res.items
         this.active = res.items[0].id
         api.getTasks(this.active).then(res => {
-          this.activeTasks = res.items
+          console.log(res)
+          this.activeTasks = res.items.filter(t => t.status === "needsAction")
+          this.completeTasks = res.items.filter(t => t.status === "completed")
         }, console.error)
       }, console.error)
     }

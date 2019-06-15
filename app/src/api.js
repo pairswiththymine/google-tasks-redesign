@@ -28,7 +28,10 @@ const api = {
 
   getTasks(key) {
     return new Promise((res, rej) => {
-      gapi.client.tasks.tasks.list({ tasklist: key }).execute(responce => {
+      gapi.client.tasks.tasks.list({ 
+        tasklist: key,
+        showHidden: true
+      }).execute(responce => {
         if(responce.error) rej(responce.error)
         else res(responce.result)
       })
