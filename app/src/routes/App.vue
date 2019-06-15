@@ -3,6 +3,10 @@
     <Header />
     <aside>
       <ul v-if="taskLists">
+        <li class="add">
+          <input type="text" placeholder="create task list" v-on:keydown.enter="addTaskList">
+        </li>
+        <li class="break"></li>
         <li 
           v-for="taskList in taskLists" 
           v-bind:key="taskList.id" 
@@ -11,7 +15,6 @@
         >
           {{ taskList.title }}
         </li>
-        <li class="break"></li>
       </ul>
     </aside>
     <main>
@@ -66,8 +69,9 @@ export default {
   methods: {
     setActiveList(id) {
       this.active = id
+      console.log(id)
       api.getTasks(this.active).then(res => {
-        this.activeTasks = res.items
+        this.activeTasks = res.items || []
       }, console.error)
     },
     getTasks() {
@@ -91,6 +95,23 @@ export default {
         this.getTasks()
       })
       console.log(e.target.value)
+    },
+    getTaskLists(cb) {
+      return api.getTaskLists().then(res => {
+        this.taskLists = res.items
+        cb(res)
+      }, console.error)
+    },
+    addTaskList(e) {
+      const taskList = {
+        title: e.target.value
+      }
+      this.taskLists.push(taskList)
+      e.target.blur()
+      e.target.value = ""
+      api.createTaskList(taskList).then(res => {
+        this.getTaskLists()
+      })
     }
   },
   watch: {
@@ -102,12 +123,11 @@ export default {
   created() {
     if(!api.authed()) this.$router.push("/")
     else {
-      api.getTaskLists().then(res => {
+      this.getTaskLists(res => {
         this.taskLists = res.items
         this.active = res.items[0].id
         this.getTasks()
-      }, console.error)
-
+      })
     }
   }
 }
@@ -127,13 +147,40 @@ aside {
   ul {
     list-style: none;
     padding-left: 0;
-    .task-list {
-      border-top-right-radius: 5000px;
-      border-bottom-right-radius: 5000px;
-      padding: 12px 32px;
+    li {
       margin: 12px 0;
       font-size: 1.1rem;
       background-color: transparent;
+    }
+    .add {
+      padding: 6px 26px;
+      input { 
+        border: none;
+        outline: none;
+        padding: 6px;
+        width: 100%;
+      }
+      &:focus-within {
+        &::after {
+          width: 100%;
+          left: 0;
+        }
+      }
+      &::after {
+        content: "";
+        display: block;
+        width: 0;
+        background-color: $main;
+        height: 2px;
+        transition: 0.2s all ease-in-out;
+        left: 50%;
+        position: relative;
+      }
+    }
+    .task-list {
+      padding: 12px 32px;
+      border-top-right-radius: 5000px;
+      border-bottom-right-radius: 5000px;
       transition: 0.1s background-color ease-in-out;
       cursor: pointer;
       &.active, &:hover {
