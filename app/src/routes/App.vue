@@ -13,7 +13,22 @@
           v-bind:class="'task-list ' + (taskList.id === active ? 'active' : '')"
           v-on:click="setActiveList(taskList.id)"
         >
-          {{ taskList.title }}
+          <p v-if="renamingList !== taskList.id">{{ taskList.title }}</p>
+          <input 
+            v-else type="text" 
+            v-bind:value="taskList.title"
+            id="renaming-tasklist"
+            autofocus
+            v-on:keydown.enter="renameTaskList"
+          >
+          <button 
+            class="action"
+            v-on:click="e => handleRenameAction(taskList.id)"
+          >
+            <img 
+              v-bind:src="(renamingList !== taskList.id) ? require('../assets/edit.svg') : require('../assets/done.svg')" 
+              v-bind:alt="(renamingList !== taskList.id) ? 'rename' : 'confirm'">
+          </button>
         </li>
       </ul>
     </aside>
@@ -21,11 +36,11 @@
       <div class="actions">
         <input type="text" v-on:keydown.enter="addTask" placeholder="add a task">
         <div>
-          <button v-on:click="showCompleted = !showCompleted">
+          <button v-on:click="showCompleted = !showCompleted" class="action">
             <span>{{showCompleted ? "hide" : "show"}} completed</span>
             <img src="../assets/done.svg" alt="toggle completed">
           </button>
-          <button v-on:click="showActive = !showActive">
+          <button v-on:click="showActive = !showActive" class="action">
             <span>{{showActive ? "hide" : "show"}} active</span>
             <img src="../assets/list.svg" alt="toggle active">
           </button>
@@ -64,12 +79,25 @@ export default {
     completeTasks: null,
     showActive: true,
     showCompleted: false,
-    shownTasks: []
+    shownTasks: [],
+    renamingList: null
   }),
   methods: {
+    handleRenameAction(id) {
+      if(this.renamingList === id) {
+        this.renameTaskList({ target: document.getElementById("renaming-tasklist") }) // emulate event
+      } else this.renamingList = id
+    },
+    renameTaskList(e) {
+      api.renameTaskList(this.renamingList, e.target.value).then(res => {
+        this.getTaskLists()
+
+      })
+      this.taskLists[this.taskLists.findIndex(t => t.id === this.renamingList)].title = e.target.value
+      this.renamingList = null
+    },
     setActiveList(id) {
       this.active = id
-      console.log(id)
       api.getTasks(this.active).then(res => {
         this.activeTasks = res.items || []
       }, console.error)
@@ -100,7 +128,7 @@ export default {
     getTaskLists(cb) {
       return api.getTaskLists().then(res => {
         this.taskLists = res.items
-        cb(res)
+        cb && cb(res)
       }, console.error)
     },
     addTaskList(e) {
@@ -113,7 +141,7 @@ export default {
       api.createTaskList(taskList).then(res => {
         this.getTaskLists()
       })
-    }
+    },
   },
   watch: {
     activeTasks: function() { this.getShownTasks() },
@@ -148,38 +176,47 @@ aside {
   ul {
     list-style: none;
     padding-left: 0;
-    li {
+    li:not(.break) {
       margin: 12px 0;
       font-size: 1.1rem;
+      padding: 8px 26px;
       background-color: transparent;
-    }
-    .add {
-      padding: 6px 26px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
       input { 
         border: none;
         outline: none;
-        padding: 6px;
+        padding: 4px 0px;
         width: 100%;
+        font-size: 1.1rem;
+        background-color: transparent;
+        position: relative;
+        z-index: 2;
+      }
+      p {
+        margin: 0;
       }
       &:focus-within {
         &::after {
-          width: 100%;
-          left: 0;
+          width: calc(100% - 56px);
+          left: 26px;
         }
       }
       &::after {
         content: "";
+        position: absolute;
         display: block;
         width: 0;
         background-color: $main;
         height: 2px;
         transition: 0.2s all ease-in-out;
-        left: 50%;
-        position: relative;
+        left: calc(50% + 26px);
+        bottom: 12px;
       }
     }
     .task-list {
-      padding: 12px 32px;
       border-top-right-radius: 5000px;
       border-bottom-right-radius: 5000px;
       transition: 0.1s background-color ease-in-out;
@@ -218,62 +255,6 @@ main {
       font-size: 1.1rem;
       box-shadow: 0 1px 2px 0 rgba(60,64,67,0.302), 0 1px 3px 1px rgba(60,64,67,0.149);
     }
-    >div {
-      button {
-        margin: 0 8px;
-        border-radius: 50%;
-        background-color: transparent;
-        outline: none;
-        border: none;
-        height: 42px;
-        width: 42px;
-        position: relative;
-        cursor: pointer;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        &::after {
-          content: "";
-          position: absolute;
-          z-index: -1;
-          border-radius: 50%;
-          top: 50%;
-          left: 50%;
-          width: 0;
-          height: 0;
-          background-color: $alt-background;
-          transition: 0.05s all ease-in-out;
-        }
-        span {
-          position: absolute;
-          bottom: 0;
-          border-radius: 2px;
-          background-color: #222;
-          color: rgba(255, 255, 255, 0.85);
-          opacity: 0;
-          padding: 4px 6px;
-          white-space: nowrap;
-          transition: 0.2s opacity ease-in-out, 0.2s bottom ease-in-out, 0.1s max-width ease-in-out;
-          pointer-events: none;
-          overflow: hidden;
-          width: auto;
-          max-width: 0;
-        }
-        &:hover {
-          &::after {
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-          }
-          span {
-            opacity: 1;
-            bottom: -50%;
-            max-width: 1000px;
-          }
-        }
-      }
-    }
   }
   .lists {
     width: 90%;
@@ -291,6 +272,61 @@ main {
   }
   .zero-state {
     background-image: url("../assets/zero-state.svg");
+  }
+}
+.action {
+  margin: 0 8px;
+  border-radius: 50%;
+  background-color: transparent;
+  outline: none;
+  border: none;
+  height: 42px;
+  width: 42px;
+  position: relative;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  &::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background-color: rgba(#000, 0.05);
+    transition: 0.05s all ease-in-out;
+  }
+  span {
+    position: absolute;
+    bottom: 0;
+    border-radius: 2px;
+    background-color: #222;
+    color: rgba(255, 255, 255, 0.85);
+    opacity: 0;
+    padding: 4px 6px;
+    white-space: nowrap;
+    transition: 0.2s opacity ease-in-out, 0.2s bottom ease-in-out, 0.1s max-width ease-in-out;
+    pointer-events: none;
+    overflow: hidden;
+    width: auto;
+    max-width: 0;
+  }
+  &:hover {
+    &::after {
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+    span {
+      opacity: 1;
+      bottom: -50%;
+      max-width: 1000px;
+    }
   }
 }
 </style>

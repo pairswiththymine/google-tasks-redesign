@@ -59,6 +59,23 @@ const api = {
         else res(responce.result)
       })
     })
+  },
+  
+  updateTaskList(id, params) {
+    return new Promise((res, rej) => {
+      gapi.client.tasks.tasklists.update({
+        tasklist: id,
+        id,
+        ...params
+      }).execute(responce => {
+        if(responce.error) rej(responce.error)
+        else res(responce.result)
+      })
+    })
+  },
+
+  renameTaskList(id, name) {
+    return this.updateTaskList(id, { title: name })
   }
 }
 
