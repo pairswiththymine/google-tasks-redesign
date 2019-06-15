@@ -36,6 +36,18 @@ const api = {
         else res(responce.result)
       })
     })
+  },
+
+  createTask(list, params) {
+    return new Promise((res, rej) => {
+      gapi.client.tasks.tasks.insert({
+        tasklist: list,
+        ...params
+      }).execute(responce => {
+        if(responce.error) rej(responce.error)
+        else res(responce.result)
+      })
+    })
   }
 }
 

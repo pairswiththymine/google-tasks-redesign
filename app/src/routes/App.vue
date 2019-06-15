@@ -15,7 +15,8 @@
       </ul>
     </aside>
     <main>
-      <div>
+      <div class="actions">
+        <input type="text" v-on:keydown.enter="addTask">
         <button v-on:click="showCompleted = !showCompleted">toggle completed</button>
         <button v-on:click="showActive = !showActive">toggle active</button>
       </div>
@@ -61,12 +62,27 @@ export default {
         this.activeTasks = res.items
       }, console.error)
     },
+    getTasks() {
+      api.getTasks(this.active).then(res => {
+        console.log(res)
+        this.activeTasks = res.items.filter(t => t.status === "needsAction")
+        this.completeTasks = res.items.filter(t => t.status === "completed")
+      }, console.error)
+    },
     getShownTasks() {
       this.shownTasks = []
       if(this.showActive) this.shownTasks = this.shownTasks.concat(this.activeTasks)
       if(this.showCompleted) this.shownTasks = this.shownTasks.concat(this.completeTasks)
-
-      console.log(this.shownTasks)
+    },
+    addTask(e) {
+      const task = {
+        title: e.target.value
+      }
+      this.activeTasks.splice(0, 0, task) // to make the insertion into the visual list instant
+      api.createTask(this.active, task).then(res => {
+        this.getTasks()
+      })
+      console.log(e.target.value)
     }
   },
   watch: {
@@ -81,12 +97,9 @@ export default {
       api.getTaskLists().then(res => {
         this.taskLists = res.items
         this.active = res.items[0].id
-        api.getTasks(this.active).then(res => {
-          console.log(res)
-          this.activeTasks = res.items.filter(t => t.status === "needsAction")
-          this.completeTasks = res.items.filter(t => t.status === "completed")
-        }, console.error)
+        this.getTasks()
       }, console.error)
+
     }
   }
 }
