@@ -224,6 +224,15 @@ aside {
       &.active, &:hover {
         background-color: $alt-background;
       }
+      &:hover {
+        >button {
+          opacity: 1;
+        }
+      }
+      >button {
+        opacity: 0;
+        transition: 0.1s opacity ease-in-out;
+      }
     }
     .break {
       height: 2px;
