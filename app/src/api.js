@@ -4,12 +4,29 @@
 
 const SCOPE = ['https://www.googleapis.com/auth/tasks']
 
-export default {
+const api = {
   init() {
-    gapi.client.load("tasks")
+    return gapi.client.load("tasks")
   },
 
   auth() {
     return gapi.auth.authorize({ client_id: process.env.VUE_APP_CLIENT_ID, scope: SCOPE })
+  },
+
+  authed() {
+    return gapi.auth.getToken() && gapi.auth.getToken().status.signed_in
+  },
+
+  getTaskLists() {
+    return new Promise((res, rej) => {
+      gapi.client.tasks.tasklists.list().execute(responce => {
+        if(responce.error) rej(responce.error)
+        else res(responce.result)
+      })
+    })
   }
 }
+
+window.api = api
+
+export default api

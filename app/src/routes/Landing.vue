@@ -24,7 +24,7 @@ export default {
     auth() {
       api.auth().then(res => {
         console.log(res)
-        this.$router.push("/app")
+        this.$router.push("app")
       })      
     }
   }

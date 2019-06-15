@@ -18,7 +18,11 @@ const router = new VueRouter({
   ]
 })
 
-new Vue({
+const app = new Vue({
   router,
   render: h => h(Container),
-}).$mount('#app')
+})
+
+window.handleGoogleApiLoaded = () => {
+  app.$mount('#app')
+}

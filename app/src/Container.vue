@@ -1,5 +1,6 @@
 <template>
-  <router-view></router-view>
+  <router-view v-if="ready"></router-view>
+  <div v-else>loading</div>
 </template>
 
 <script>
@@ -7,9 +8,12 @@ import api from "./api.js"
 
 export default {
   name: 'Container',
-  mounted() {
-    document.addEventListener("DOMContentLoaded", e => {
-      api.init()
+  data: () => ({
+    ready: false
+  }),
+  created() {
+    api.init().then(() => {
+      this.ready = true
     })
   }
 }
