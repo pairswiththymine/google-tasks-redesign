@@ -76,6 +76,17 @@ const api = {
 
   renameTaskList(id, name) {
     return this.updateTaskList(id, { title: name })
+  },
+
+  deleteTaskList(id) {
+    return new Promise((res, rej) => {
+      gapi.client.tasks.tasklists.delete({
+        tasklist: id
+      }).execute(responce => {
+        if(responce.error) rej(responce.error)
+        else res(responce.result)
+      })
+    })
   }
 }
 

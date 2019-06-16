@@ -8,7 +8,7 @@
         </li>
         <li class="break"></li>
         <li 
-          v-for="taskList in taskLists" 
+          v-for="(taskList, i) in taskLists" 
           v-bind:key="taskList.id" 
           v-bind:class="'task-list ' + (taskList.id === active ? 'active' : '')"
           v-on:click="setActiveList(taskList.id)"
@@ -21,14 +21,29 @@
             autofocus
             v-on:keydown.enter="renameTaskList"
           >
-          <button 
-            class="action"
-            v-on:click="e => handleRenameAction(taskList.id)"
-          >
-            <img 
-              v-bind:src="(renamingList !== taskList.id) ? require('../assets/edit.svg') : require('../assets/done.svg')" 
-              v-bind:alt="(renamingList !== taskList.id) ? 'rename' : 'confirm'">
-          </button>
+          <div class="actions">
+            <button 
+              class="action"
+              v-on:click="e => {
+                e.stopPropagation()
+                handleRenameAction(taskList.id)  
+              }"
+            >
+              <img 
+                v-bind:src="(renamingList !== taskList.id) ? require('../assets/edit.svg') : require('../assets/done.svg')" 
+                v-bind:alt="(renamingList !== taskList.id) ? 'rename' : 'confirm'">
+            </button>
+            <button 
+              class="action"
+              v-if="renamingList !== taskList.id"
+              v-on:click="e => {
+                e.stopPropagation()
+                deleteTaskList(taskList.id, i)
+              }"
+            >
+              <img src="../assets/delete.svg">
+            </button>
+          </div>
         </li>
       </ul>
     </aside>
@@ -91,10 +106,17 @@ export default {
     renameTaskList(e) {
       api.renameTaskList(this.renamingList, e.target.value).then(res => {
         this.getTaskLists()
-
       })
+      e.target.blur()
       this.taskLists[this.taskLists.findIndex(t => t.id === this.renamingList)].title = e.target.value
       this.renamingList = null
+    },
+    deleteTaskList(id, i) {
+      this.taskLists.splice(i, 1)
+      this.active = this.taskLists[0].id
+      api.deleteTaskList(id).then(() => {
+        this.getTaskLists()
+      })
     },
     setActiveList(id) {
       this.active = id
@@ -179,7 +201,7 @@ aside {
     li:not(.break) {
       margin: 12px 0;
       font-size: 1.1rem;
-      padding: 8px 26px;
+      padding: 8px 2px 8px 26px;
       background-color: transparent;
       display: flex;
       align-items: center;
@@ -195,8 +217,18 @@ aside {
         position: relative;
         z-index: 2;
       }
+      .actions {
+        min-width: max-content;
+        >button {
+          display: inline-block;
+        }
+      }
       p {
         margin: 0;
+        word-wrap: none;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
       }
       &:focus-within {
         &::after {
