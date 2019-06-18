@@ -2,7 +2,7 @@
   <div class="task">
     <p class="title">{{ task.title }}</p>
     <p v-if="task.due">{{ task.due }}</p>
-    <p v-if="task.notes">{{ task.notes }}</p>
+    <p v-if="task.notes">{{ shownNotes }}</p>
   </div>
 </template>
 
@@ -10,7 +10,14 @@
 export default {
   name: "task-item",
   props: {
-    task: Object
+    task: Object,
+    expanded: false
+  },
+  computed: {
+    shownNotes() {
+      if(this.task.notes.length < 100) return this.task.notes
+      return this.task.notes.substring(0, this.task.notes.indexOf(" ", 90)) + "..."
+    }
   }
 }
 </script>

@@ -217,8 +217,15 @@ aside {
         position: relative;
         z-index: 2;
       }
+      &:hover {
+        .actions {
+          opacity: 1;
+        }
+      }
       .actions {
         min-width: max-content;
+        opacity: 0;
+        transition: 0.1s ease-in-out opacity;
         >button {
           display: inline-block;
         }
@@ -232,7 +239,7 @@ aside {
       }
       &:focus-within {
         &::after {
-          width: calc(100% - 56px);
+          width: calc(100% - 112px);
           left: 26px;
         }
       }
