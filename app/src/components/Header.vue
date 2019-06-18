@@ -78,7 +78,7 @@ header {
     }
   }
   >a {
-    margin-left: 32px;
+    margin-left: 8px;
     display: flex;
     align-items: center;
     justify-content: center;

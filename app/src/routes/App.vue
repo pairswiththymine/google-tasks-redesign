@@ -289,10 +289,11 @@ aside {
 
 main {
   &.bump { margin-left: 300px; }
-  margin-left: 0;
+  margin-left: 150px;
   transition: margin-left 0.15s ease-in-out; // intentionally offset
   margin-top: 64px;
   font-family: $main-font;
+  width: calc(100% - 300px);
   .actions {
     display: flex;
     align-items: center;
