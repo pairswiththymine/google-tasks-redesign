@@ -1,6 +1,10 @@
 <template>
   <header v-bind:class="shadow ? 'shadowed' : ''">
-    <button v-on:click="$emit('toggle-menu')">ham</button>
+    <button v-on:click="$emit('toggle-menu')">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
     <a href="#">
       <img src="../assets/tasks_64dp.png" alt="">
       <span>Tasks</span>
@@ -44,8 +48,52 @@ header {
   &.shadowed {
     box-shadow: 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12), 0 2px 4px -1px rgba(0,0,0,0.2);
   }
+  >button {
+    margin-left: 24px;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    height: 24px;
+    width: 48px;
+    position: relative;
+    cursor: pointer;
+    &::after {
+      content: "";
+      top: 50%;
+      left: 50%;
+      height: 0;
+      width: 0;
+      background-color: $alt-background;
+      position: absolute;
+      z-index: -1;
+      border-radius: 50%;
+      transition: all ease-in-out 0.1s;
+    }
+    &:hover::after {
+      top: -12px;
+      left: 0;
+      padding-top: 100%;
+      width: 100%;
+    }
+    span {
+      height: 2px;
+      position: absolute;
+      left: 10%;
+      width: 80%;
+      background-color: rgba($color, 0.3);
+      &:nth-child(1) {
+        top: -1px;
+      }
+      &:nth-child(2) {
+        top: calc(50% - 1px);
+      }
+      &:nth-child(3) {
+        top: calc(100% - 1px);
+      }
+    }
+  }
   >a {
-    margin-left: 16px;
+    margin-left: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
