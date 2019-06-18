@@ -66,6 +66,7 @@
             v-for="task in shownTasks"
             v-bind:key="task.id"
             v-bind:task="task"
+            v-bind:listId="active"
           />
         </div>
         <div 
