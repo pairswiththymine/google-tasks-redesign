@@ -1,5 +1,6 @@
 <template>
   <header v-bind:class="shadow ? 'shadowed' : ''">
+    <button v-on:click="$emit('toggle-menu')">ham</button>
     <a href="#">
       <img src="../assets/tasks_64dp.png" alt="">
       <span>Tasks</span>

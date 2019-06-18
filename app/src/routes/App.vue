@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Header />
-    <aside>
+    <Header v-on:toggle-menu="toggleAside"/>
+    <aside v-bind:class="showAside ? 'show' : 'hide'">
       <ul v-if="taskLists">
         <li class="add">
           <input type="text" placeholder="create task list" v-on:keydown.enter="addTaskList">
@@ -47,7 +47,7 @@
         </li>
       </ul>
     </aside>
-    <main>
+    <main v-bind:class="showAside ? 'bump' : ''">
       <div class="actions">
         <input type="text" v-on:keydown.enter="addTask" placeholder="add a task">
         <div>
@@ -96,9 +96,11 @@ export default {
     showActive: true,
     showCompleted: false,
     shownTasks: [],
-    renamingList: null
+    renamingList: null,
+    showAside: true
   }),
   methods: {
+    toggleAside() { this.showAside = !this.showAside },
     handleRenameAction(id) {
       if(this.renamingList === id) {
         this.renameTaskList({ target: document.getElementById("renaming-tasklist") }) // emulate event
@@ -196,6 +198,9 @@ aside {
   top: 0;
   left: 0;
   font-family: $main-font;
+  transition: left 0.2s ease-in-out;
+  &.show { left: 0 }
+  &.hide { left: -300px }
   ul {
     list-style: none;
     padding-left: 0;
@@ -283,7 +288,9 @@ aside {
 }
 
 main {
-  margin-left: 300px;
+  &.bump { margin-left: 300px; }
+  margin-left: 0;
+  transition: margin-left 0.15s ease-in-out; // intentionally offset
   margin-top: 64px;
   font-family: $main-font;
   .actions {
@@ -311,6 +318,7 @@ main {
     padding-top: 8px;
     display: grid;
     grid-template-columns: 50% 50%;
+    
   }
   .bg {
     height: calc(100vh - 64px);
