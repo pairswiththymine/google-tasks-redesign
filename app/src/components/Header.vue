@@ -1,9 +1,7 @@
 <template>
   <header v-bind:class="shadow ? 'shadowed' : ''">
     <button v-on:click="$emit('toggle-menu')">
-      <span></span>
-      <span></span>
-      <span></span>
+      <img src="../assets/menu.svg" alt="menu">
     </button>
     <a href="#">
       <img src="../assets/tasks_64dp.png" alt="">
@@ -53,10 +51,13 @@ header {
     background-color: transparent;
     border: none;
     outline: none;
-    height: 24px;
+    height: 48px;
     width: 48px;
     position: relative;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     &::after {
       content: "";
       top: 50%;
@@ -70,26 +71,10 @@ header {
       transition: all ease-in-out 0.1s;
     }
     &:hover::after {
-      top: -12px;
+      top: 0;
       left: 0;
       padding-top: 100%;
       width: 100%;
-    }
-    span {
-      height: 2px;
-      position: absolute;
-      left: 10%;
-      width: 80%;
-      background-color: rgba($color, 0.3);
-      &:nth-child(1) {
-        top: -1px;
-      }
-      &:nth-child(2) {
-        top: calc(50% - 1px);
-      }
-      &:nth-child(3) {
-        top: calc(100% - 1px);
-      }
     }
   }
   >a {
