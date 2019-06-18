@@ -18,7 +18,6 @@ export default {
     document.addEventListener("scroll", e => {
       if(window.scrollY < 40) that.shadow = false
       else that.shadow = true
-      console.log(this.shadow)
     })
   }
 }
