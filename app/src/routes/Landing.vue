@@ -36,13 +36,17 @@ export default {
 
 .landing {
   height: 100vh;
-  width: 50%;
+  width: 60%;
   max-width: 960px;
-  margin: 0 45% 0 5%;
+  margin: 0 35% 0 5%;
   font-family: $main-font;
   overflow: hidden;
   display: flex;
   align-items: center;
+  @media only screen and (max-width: 1100px) {
+    width: 95%;
+    margin: 0 auto;
+  }
   >div {
     display: flex;
     justify-content: center;
@@ -51,13 +55,16 @@ export default {
   .img {
     position: absolute;
     right: 0;
-
     background-image: url("../assets/hero.svg");
     background-size: contain;
     background-position: right;
     background-repeat: no-repeat;
     width: 50%;
     height: 100%;
+    z-index: -1;
+    @media only screen and (max-width: 1240px) {
+      opacity: 0.7;
+    }
   }
   h1 {
     font-size: 4rem;
@@ -100,7 +107,6 @@ export default {
   .disclaimer {
     position: absolute;
     bottom: 16px;
-    width: 50%;
   }
 }
 </style>
