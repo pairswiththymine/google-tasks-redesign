@@ -319,7 +319,9 @@ main {
     padding-top: 8px;
     display: grid;
     grid-template-columns: 50% 50%;
-    
+    @media only screen and (max-width: 1100px) {
+      grid-template-columns: 100%;
+    }
   }
   .bg {
     height: calc(100vh - 64px);

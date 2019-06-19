@@ -27,6 +27,7 @@
       v-show="expanded"
       placeholder="Add details"
       v-on:keydown="resizeArea" 
+      v-on:change="resizeArea"
       v-model="newNotes" 
       v-on:blur="saveNewNote"
       class="notes"></textarea>
