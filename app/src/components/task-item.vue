@@ -58,7 +58,8 @@ export default {
   methods: {
     resizeArea(e) {
       setTimeout(() => {
-        e.target.style.height = e.target.scrollHeight + "px"
+        e.target.style.cssText = "height: auto; padding: 0"
+        e.target.style.cssText = `height: ${e.target.scrollHeight}px`
       }, 0) // delay to get new text
     },
     saveNewNote() {
@@ -210,6 +211,7 @@ export default {
     height: auto;
     color: $color;
     resize: vertical;
+    box-sizing: initial;
   }
 }
 </style>
