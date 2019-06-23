@@ -5,7 +5,10 @@
         class="complete"
         v-on:click="toggleComplete"
       >
-        <img src="../assets/done.svg" alt="">
+        <div class="img">
+          <img src="../assets/done.svg" alt="">
+
+        </div>
       </button>
       <p class="title" v-show="!expanded">{{ task.title }}</p>
       <input 
@@ -110,15 +113,26 @@ export default {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    position: relative;
+    .img {
+      width: 0;
+      overflow: hidden;
+      height: 24px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      transition: width 0.1s cubic-bezier(0, 0.27, 1, 0.1);
+    }
     img {
       vertical-align: middle;
       position: relative;
       top: -3px;
-      opacity: 0;
+      height: 24px;
+      transition: width ease-in-out 0.1s;
     }
   }
-  .completed>.complete>img {
-    opacity: 1;
+  .completed>.complete>.img {
+    width: 24px;
   }
   .title-bar {
     display: flex;
