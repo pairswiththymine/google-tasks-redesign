@@ -47,7 +47,7 @@
         </li>
       </ul>
     </aside>
-    <main v-bind:class="showAside ? 'bump' : ''">
+    <main v-bind:class="(showAside ? 'bump' : '')">
       <div class="actions">
         <input type="text" v-on:keydown.enter="addTask" placeholder="add a task">
         <div>
@@ -61,19 +61,20 @@
           </button>
         </div>
       </div>
-        <div v-if="shownTasks.length" class="lists">
-          <task-item
-            v-for="task in shownTasks"
-            v-bind:key="task.id"
-            v-bind:task="task"
-            v-bind:listId="active"
-            v-on:toggle-complete="val => toggleComplete(task.id, val)"
-          />
-        </div>
-        <div 
-          v-else
-          v-bind:class="'bg ' + (!activeTasks.length && completeTasks.length) ? 'completed' : 'zero-state'"
-        ></div>
+      <div 
+        v-bind:class="'lists' + (mainFaded || !shownTasks.length ? ' faded' : '')">
+        <task-item
+          v-for="task in shownTasks"
+          v-bind:key="task.id"
+          v-bind:task="task"
+          v-bind:listId="active"
+          v-on:toggle-complete="val => toggleComplete(task.id, val)"
+        />
+      </div>
+      <div 
+        v-if="!shownTasks.length"
+        v-bind:class="'bg ' + ((!activeTasks.length && completeTasks.length) ? 'empty-state' : 'zero-state')"
+      ></div>
     </main>
   </div>
 </template>
@@ -98,7 +99,8 @@ export default {
     showCompleted: false,
     shownTasks: [],
     renamingList: null,
-    showAside: true
+    showAside: true,
+    mainFaded: false
   }),
   methods: {
     toggleComplete(id, newVal) {
@@ -137,14 +139,25 @@ export default {
       })
     },
     setActiveList(id) {
-      this.active = id
+      this.mainFaded = true
+        this.active = id
+      // setTimeout(() => {
+      // }, 300)
       api.getTasks(this.active).then(res => {
-        this.activeTasks = res.items || []
+        this.mainFaded = false
+        console.log(res)
+        if(res.items) {
+          this.activeTasks = res.items.filter(i => i.status === "needsAction")
+          this.completeTasks = res.items.filter(i => i.status === "completed")
+        } else {
+          this.activeTasks = []
+          this.completeTasks = []
+        }
+        this.getShownTasks()
       }, console.error)
     },
     getTasks() {
       api.getTasks(this.active).then(res => {
-        console.log(res)
         this.activeTasks = res.items.filter(t => t.status === "needsAction")
         this.completeTasks = res.items.filter(t => t.status === "completed")
       }, console.error)
@@ -309,6 +322,7 @@ main {
   margin-top: 64px;
   font-family: $main-font;
   width: calc(100% - 300px);
+  position: relative;
   .actions {
     display: flex;
     align-items: center;
@@ -334,6 +348,9 @@ main {
     padding-top: 8px;
     display: grid;
     grid-template-columns: 50% 50%;
+    opacity: 1;
+    transition: opacity 0.1s ease-in-out;
+    &.faded { opacity: 0; }
     @media only screen and (max-width: 1100px) {
       grid-template-columns: 100%;
     }
@@ -344,9 +361,15 @@ main {
     background-size: 20%;
     background-position: center;
     background-repeat: no-repeat;
+    position: absolute;
+    top: 0;
+    left: 0;
   }
   .zero-state {
     background-image: url("../assets/zero-state.svg");
+  }
+  .empty-state {
+    background-image: url("../assets/empty-state.svg");
   }
 }
 .action {
