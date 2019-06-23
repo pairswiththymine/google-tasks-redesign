@@ -74,8 +74,19 @@
         </div>
         <div 
           v-if="!shownTasks.length"
-          v-bind:class="'bg ' + ((!activeTasks.length && completeTasks.length) ? 'show empty-state' : 'show zero-state')"
-        ></div>
+          v-bind:class="'bg' + ((!activeTasks.length && completeTasks.length) && ' show')"
+        >
+          <img :src="((!activeTasks.length && completeTasks.length) ? emptyState : zeroState)" />
+          <!-- intentio nally seperated for fade in animation -->
+          <div v-if="!activeTasks.length && completeTasks.length">
+            <p>Nicely done!</p>
+            <p>You've finished all your tasks. Take a second to recharge</p>
+          </div>
+          <div v-else>
+            <p>A fresh start</p>
+            <p>Anything to add?</p>
+          </div>
+        </div>
       </div>
     </main>
   </div>
@@ -85,6 +96,7 @@
 import Header from "../components/Header.vue"
 import TaskItem from "../components/task-item.vue"
 import api from "../api.js"
+
 
 export default {
   name: "app",
@@ -102,7 +114,10 @@ export default {
     shownTasks: [],
     renamingList: null,
     showAside: true,
-    mainFaded: false
+    mainFaded: false,
+    // hack to make img src work
+    emptyState: require('../assets/empty-state.svg'),
+    emptyState: require('../assets/zero-state.svg')
   }),
   methods: {
     toggleComplete(id, newVal) {
@@ -219,6 +234,20 @@ export default {
 
 <style lang="scss" scoped>
 @import "../_style.scss";
+
+$fade-top: -20px;
+
+@keyframes fade-down {
+  0% {
+    top: $fade-top;
+    opacity: 0;
+  }
+
+  100% {
+    top: 0;
+    opacity: 1;
+  }
+}
 
 aside {
   height: 100vh;
@@ -370,13 +399,29 @@ main {
     top: 0;
     left: 0;
     opacity: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    >div {
+      width: 100%;
+      p {
+        text-align: center;
+        animation: fade-down 0.15s ease-in-out forwards;
+        position: relative;
+        top: $fade-top;
+        opacity: 0;
+        &:first-child {
+          font-weight: 700;
+          letter-spacing: 0.1rem;
+          animation-delay: 0.1s;
+        }
+        &:last-child {
+          animation-delay: 0.15s;
+        }
+      }
+    }
     &.show { opacity: 1; }
-    &.zero-state {
-      background-image: url("../assets/zero-state.svg");
-    }
-    &.empty-state {
-      background-image: url("../assets/empty-state.svg");
-    }
   }
 }
 .action {
