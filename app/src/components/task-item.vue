@@ -7,13 +7,11 @@
       >
         <div class="img">
           <img src="../assets/done.svg" alt="">
-
         </div>
       </button>
-      <p class="title" v-show="!expanded">{{ task.title }}</p>
       <input 
         class="title" 
-        v-show="expanded" 
+        v-bind:disabled="!expanded" 
         v-on:blur="saveNewNote"
         v-model="newTitle" />
         <button class="expand">
@@ -138,6 +136,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: 2px;
     .title {
       display: inline-block;
       font-size: 1.5rem;
@@ -163,16 +162,22 @@ export default {
     }
   }
   input, textarea {
-    background-color: $alt-background;
+    &:not(:disabled) {
+      border: 1px solid $alt-background;
+      border-bottom: 2px solid $alt-background;
+    }
+    background: transparent;
     border: none;
     outline: none;
+    border: 1px solid transparent;
     border-bottom: 2px solid transparent;
-    transition: 0.2s border-bottom ease-in-out;
+    transition: 0.2s border ease-in-out;
     border-radius: 2px;
     &:focus {
       border-bottom: 2px solid $main;
     }
   }
+  
   .notes {
     color: rgba($color, 0.5);
     width: 100%;
