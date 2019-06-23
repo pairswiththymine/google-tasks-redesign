@@ -28,7 +28,6 @@
       v-show="expanded"
       placeholder="Add details"
       v-on:keydown="resizeArea" 
-      v-on:change="resizeArea"
       v-model="newNotes" 
       v-on:blur="saveNewNote"
       class="notes"></textarea>
@@ -190,7 +189,6 @@ export default {
     outline: none;
     border: 1px solid transparent;
     border-bottom: 2px solid transparent;
-    transition: 0.2s border ease-in-out;
     border-radius: 2px;
     &:focus {
       border-bottom: 2px solid $main;
@@ -204,9 +202,14 @@ export default {
     line-height: 1.3rem;
     overflow: hidden;
     font-family: $main-font;
+    margin: 0;
+    padding: 8px 4px;
+    border: 1px solid transparent;
   }
   textarea.notes {
+    height: auto;
     color: $color;
+    resize: vertical;
   }
 }
 </style>
