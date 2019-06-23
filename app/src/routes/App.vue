@@ -74,7 +74,7 @@
         </div>
         <div 
           v-if="!shownTasks.length"
-          v-bind:class="'bg' + ((!activeTasks.length && completeTasks.length) && ' show')"
+          v-bind:class="'bg' + (!shownTasks.length ? ' show' : '')"
         >
           <img :src="((!activeTasks.length && completeTasks.length) ? emptyState : zeroState)" />
           <!-- intentio nally seperated for fade in animation -->
@@ -117,7 +117,7 @@ export default {
     mainFaded: false,
     // hack to make img src work
     emptyState: require('../assets/empty-state.svg'),
-    emptyState: require('../assets/zero-state.svg')
+    zeroState: require('../assets/zero-state.svg')
   }),
   methods: {
     toggleComplete(id, newVal) {
