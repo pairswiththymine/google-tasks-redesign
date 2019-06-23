@@ -67,6 +67,7 @@
             v-bind:key="task.id"
             v-bind:task="task"
             v-bind:listId="active"
+            v-on:toggle-complete="toggleComplete"
           />
         </div>
         <div 
@@ -100,6 +101,18 @@ export default {
     showAside: true
   }),
   methods: {
+    toggleComplete(id, newVal) {
+      if(newVal) { // if not completed -> completed
+        const index = this.activeTasks.findIndex(t => id === t.id)
+        const task = this.activeTasks.splice(index, 1)
+        this.completeTasks.push(task)
+      } else { // if completed -> not completed
+        const index = this.completeTasks.findIndex(t => id === t.id)
+        const task = this.completeTasks.splice(index, 1)
+        this.activeTasks.push(task)
+      }
+      this.getShownTasks()
+    },
     toggleAside() { this.showAside = !this.showAside },
     handleRenameAction(id) {
       if(this.renamingList === id) {
@@ -216,7 +229,7 @@ aside {
       input { 
         border: none;
         outline: none;
-        padding: 4px 0px;
+        padding: 8px 0;
         width: 100%;
         font-size: 1.1rem;
         background-color: transparent;

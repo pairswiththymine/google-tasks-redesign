@@ -1,5 +1,5 @@
 <template>
-  <div v-bind:class="'task ' + (expanded ? 'expanded' : 'not-expanded')">
+  <div v-bind:class="'task ' + (expanded ? 'expanded' : 'not-expanded') + (hide ? ' hide' : '')">
     <div v-bind:class="'title-bar ' + (this.completed ? 'completed' : '')">
       <button 
         class="complete"
@@ -48,9 +48,10 @@ export default {
     expanded: false,
     newNotes: "",
     newTitle: "",
-    completed: false
+    completed: false,
+    hide: false
   }),
-  created() {
+  mounted() {
     this.newNotes = this.task.notes
     this.newTitle = this.task.title
     this.completed = this.task.status === 'completed'
@@ -70,7 +71,11 @@ export default {
     },
     toggleComplete() {
       this.completed = !this.completed
-      this.saveNewNote()
+      this.hide = true
+      setTimeout(() => {
+        this.saveNewNote()
+        this.$emit("toggle-complete", this.task.id, this.completed)
+      }, 500)
     }
   },
   watch: {
@@ -94,7 +99,19 @@ export default {
   border-radius: 8px;
   margin: 8px;
   padding: 8px 24px;
-  transition: box-shadow ease-in-out 0.2s;
+  transition: box-shadow ease-in-out 0.2s, 
+              max-height ease-out 0.5s,
+              padding ease-out 0.5s,
+              opacity ease-out 0.5s;
+  overflow: hidden;
+  max-height: 500px;
+  height: auto;
+  opacity: 1;
+  &.hide {
+    max-height: 0;
+    padding: 0 24px;
+    opacity: 0;
+  }
   &.not-expanded { cursor: pointer; }
   &:hover {
     box-shadow: 0 1px 2px 0 rgba(60,64,67,0.302), 0 1px 3px 1px rgba(60,64,67,0.149);
@@ -125,6 +142,7 @@ export default {
       vertical-align: middle;
       position: relative;
       top: -3px;
+      color: $main;
       height: 24px;
       transition: width ease-in-out 0.1s;
     }
