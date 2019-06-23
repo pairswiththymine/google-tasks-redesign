@@ -105,11 +105,11 @@ export default {
       if(newVal) { // if not completed -> completed
         const index = this.activeTasks.findIndex(t => id === t.id)
         const task = this.activeTasks.splice(index, 1)
-        this.completeTasks.push(task)
+        this.completeTasks.push(task[0])
       } else { // if completed -> not completed
         const index = this.completeTasks.findIndex(t => id === t.id)
         const task = this.completeTasks.splice(index, 1)
-        this.activeTasks.push(task)
+        this.activeTasks.push(task[0])
       }
       this.getShownTasks()
     },

@@ -52,6 +52,7 @@ export default {
     hide: false
   }),
   mounted() {
+    console.log("mounted")
     this.newNotes = this.task.notes
     this.newTitle = this.task.title
     this.completed = this.task.status === 'completed'
