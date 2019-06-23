@@ -52,7 +52,6 @@ export default {
     hide: false
   }),
   mounted() {
-    console.log("mounted")
     this.newNotes = this.task.notes
     this.newTitle = this.task.title
     this.completed = this.task.status === 'completed'
@@ -75,7 +74,7 @@ export default {
       this.hide = true
       setTimeout(() => {
         this.saveNewNote()
-        this.$emit("toggle-complete", this.task.id, this.completed)
+        this.$emit("toggle-complete", this.completed)
       }, 500)
     }
   },

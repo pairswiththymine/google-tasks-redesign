@@ -30,7 +30,8 @@ const api = {
     return new Promise((res, rej) => {
       gapi.client.tasks.tasks.list({ 
         tasklist: key,
-        showHidden: true
+        showHidden: true,
+        maxResults: 100
       }).execute(responce => {
         if(responce.error) rej(responce.error)
         else res(responce.result)
