@@ -63,11 +63,11 @@
       </div>
         <div v-if="shownTasks.length" class="lists">
           <task-item
-            v-for="(task, i) in shownTasks"
+            v-for="task in shownTasks"
             v-bind:key="task.id"
             v-bind:task="task"
             v-bind:listId="active"
-            v-on:toggle-complete="val => toggleComplete(task.id, val, i)"
+            v-on:toggle-complete="val => toggleComplete(task.id, val)"
           />
         </div>
         <div 
@@ -105,14 +105,14 @@ export default {
       if(newVal) { // if not completed -> completed
         const index = this.activeTasks.findIndex(t => id === t.id)
         const task = this.activeTasks.splice(index, 1)
+        task.completed = newVal ? "completed" : "needsAction"
         this.completeTasks.push(task[0])
       } else { // if completed -> not completed
         const index = this.completeTasks.findIndex(t => id === t.id)
         const task = this.completeTasks.splice(index, 1)
+        task.completed = newVal ? "completed" : "needsAction"
         this.activeTasks.push(task[0])
       }
-      console.log(this.completeTasks)
-      console.log(this.activeTasks) 
       this.getShownTasks()
     },
     toggleAside() { this.showAside = !this.showAside },

@@ -75,6 +75,7 @@ export default {
       setTimeout(() => {
         this.saveNewNote()
         this.$emit("toggle-complete", this.completed)
+        this.hide = false
       }, 500)
     }
   },
