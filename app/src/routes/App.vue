@@ -61,20 +61,22 @@
           </button>
         </div>
       </div>
-      <div 
-        v-bind:class="'lists' + (mainFaded || !shownTasks.length ? ' faded' : '')">
-        <task-item
-          v-for="task in shownTasks"
-          v-bind:key="task.id"
-          v-bind:task="task"
-          v-bind:listId="active"
-          v-on:toggle-complete="val => toggleComplete(task.id, val)"
-        />
+      <div v-bind:class="'container ' + (mainFaded ? ' faded' : '')">
+        <div 
+          class="lists">
+          <task-item
+            v-for="task in shownTasks"
+            v-bind:key="task.id"
+            v-bind:task="task"
+            v-bind:listId="active"
+            v-on:toggle-complete="val => toggleComplete(task.id, val)"
+          />
+        </div>
+        <div 
+          v-if="!shownTasks.length"
+          v-bind:class="'bg ' + ((!activeTasks.length && completeTasks.length) ? 'show empty-state' : 'show zero-state')"
+        ></div>
       </div>
-      <div 
-        v-if="!shownTasks.length"
-        v-bind:class="'bg ' + ((!activeTasks.length && completeTasks.length) ? 'empty-state' : 'zero-state')"
-      ></div>
     </main>
   </div>
 </template>
@@ -348,28 +350,33 @@ main {
     padding-top: 8px;
     display: grid;
     grid-template-columns: 50% 50%;
-    opacity: 1;
-    transition: opacity 0.1s ease-in-out;
-    &.faded { opacity: 0; }
     @media only screen and (max-width: 1100px) {
       grid-template-columns: 100%;
     }
   }
+  .container {
+    opacity: 1;
+    transition: opacity 0.1s ease-in-out;
+    &.faded { opacity: 0; }
+  }
   .bg {
     height: calc(100vh - 64px);
     width: 100%;
-    background-size: 20%;
+    background-size: 30%;
     background-position: center;
     background-repeat: no-repeat;
     position: absolute;
+    pointer-events: none;
     top: 0;
     left: 0;
-  }
-  .zero-state {
-    background-image: url("../assets/zero-state.svg");
-  }
-  .empty-state {
-    background-image: url("../assets/empty-state.svg");
+    opacity: 0;
+    &.show { opacity: 1; }
+    &.zero-state {
+      background-image: url("../assets/zero-state.svg");
+    }
+    &.empty-state {
+      background-image: url("../assets/empty-state.svg");
+    }
   }
 }
 .action {
