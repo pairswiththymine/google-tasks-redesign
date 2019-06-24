@@ -22,12 +22,13 @@
         </button>
     </div>
     <p v-if="task.due">{{ task.due }}</p>
-    <p v-show="!expanded" class="notes">{{ shownNotes }}</p>
+    <p v-if="!expanded" class="notes">{{ shownNotes }}</p>
     <textarea 
       ref="notesArea"
-      v-show="expanded"
+      v-else
       placeholder="Add details"
       v-on:keydown="resizeArea" 
+      v-on:change="resizeArea" 
       v-model="newNotes" 
       v-on:blur="saveNewNote"
       class="notes"></textarea>
@@ -210,7 +211,7 @@ export default {
   textarea.notes {
     height: auto;
     color: $color;
-    resize: vertical;
+    resize: none;
     box-sizing: initial;
   }
 }
