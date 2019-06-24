@@ -425,7 +425,7 @@ main {
   }
 }
 .action {
-  margin: 0 8px;
+  margin: 0 4px;
   border-radius: 50%;
   background-color: transparent;
   outline: none;
