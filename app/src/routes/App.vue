@@ -10,10 +10,10 @@
         <li 
           v-for="(taskList, i) in taskLists" 
           v-bind:key="taskList.id" 
-          v-bind:class="'task-list ' + (taskList.id === active ? 'active' : '')"
+          v-bind:class="'task-list ' + (taskList.id === active ? 'active' : '') + (taskList.loading ? ' loading' : '')"
           v-on:click="setActiveList(taskList.id)"
         >
-          <p v-if="renamingList !== taskList.id">{{ taskList.title }}</p>
+          <p v-if="renamingList !== taskList.id">{{ !taskList.loading ? taskList.title : "creating task list" }}</p>
           <input 
             v-else type="text" 
             v-bind:value="taskList.title"
@@ -77,7 +77,7 @@
           v-bind:class="'bg' + (!shownTasks.length ? ' show' : '')"
         >
           <img :src="((!activeTasks.length && completeTasks.length) ? emptyState : zeroState)" />
-          <!-- intentio nally seperated for fade in animation -->
+          <!-- intentionally seperated for fade in animation -->
           <div v-if="!activeTasks.length && completeTasks.length">
             <p>Nicely done!</p>
             <p>You've finished all your tasks. Take a second to recharge</p>
@@ -107,8 +107,8 @@ export default {
   data: () => ({
     taskLists: null,
     active: null,
-    activeTasks: null,
-    completeTasks: null,
+    activeTasks: [],
+    completeTasks: [],
     showActive: true,
     showCompleted: false,
     shownTasks: [],
@@ -157,12 +157,12 @@ export default {
     },
     setActiveList(id) {
       this.mainFaded = true
-        this.active = id
-      // setTimeout(() => {
-      // }, 300)
+      this.active = id
+      this.getTasks()
+    },
+    getTasks() {
       api.getTasks(this.active).then(res => {
         this.mainFaded = false
-        console.log(res)
         if(res.items) {
           this.activeTasks = res.items.filter(i => i.status === "needsAction")
           this.completeTasks = res.items.filter(i => i.status === "completed")
@@ -171,13 +171,10 @@ export default {
           this.completeTasks = []
         }
         this.getShownTasks()
-      }, console.error)
-    },
-    getTasks() {
-      api.getTasks(this.active).then(res => {
-        this.activeTasks = res.items.filter(t => t.status === "needsAction")
-        this.completeTasks = res.items.filter(t => t.status === "completed")
-      }, console.error)
+      }).catch(res => {
+        this.mainFaded = false
+        console.error(res)
+      })
     },
     getShownTasks() {
       this.shownTasks = []
@@ -199,17 +196,19 @@ export default {
       return api.getTaskLists().then(res => {
         this.taskLists = res.items
         cb && cb(res)
-      }, console.error)
+      }).catch(console.error)
     },
     addTaskList(e) {
       const taskList = {
-        title: e.target.value
+        title: e.target.value,
+        loading: true
       }
-      this.taskLists.push(taskList)
       e.target.blur()
       e.target.value = ""
+      this.taskLists.push(taskList)
       api.createTaskList(taskList).then(res => {
         this.getTaskLists()
+        this.setActiveList(res.id)
       })
     },
   },
@@ -246,6 +245,32 @@ $fade-top: -20px;
   100% {
     top: 0;
     opacity: 1;
+  }
+}
+
+@keyframes loading-task-list {
+  0% {
+    left: 0;
+    top: 50%;
+    opacity: 0;
+    height: 0;
+    width: 0;
+  }
+
+  70% {
+    left: -300px;
+    top: -300px;
+    opacity: 1;
+    height: 600px;
+    width: 600px;
+  }
+
+  100% {
+    left: -300px;
+    top: -300px;
+    opacity: 0;
+    height: 600px;
+    width: 600px;
   }
 }
 
@@ -328,10 +353,24 @@ aside {
       &.active, &:hover {
         background-color: $alt-background;
       }
-      &:hover {
-        >button {
-          opacity: 1;
+      &.loading {
+        opacity: 0.3;
+        overflow: hidden;
+        position: relative;
+        &::after {
+          content: "";
+          position: absolute;
+          border-radius: 50%;
+          background-color: rgba($main, 0.3);
+          animation: loading-task-list 2s linear infinite;
         }
+        cursor: wait;
+        &:hover>.actions {
+          opacity: 0 !important;
+        }
+      }
+      &:hover>button {
+        opacity: 1;
       }
       >button {
         opacity: 0;
