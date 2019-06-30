@@ -21,8 +21,8 @@
           <span 
             v-for="(day, i) in days" 
             v-bind:key="i"
-            v-bind:class="'date ' + (day.selected ? 'selected' : '')"
-            v-on:click="setSelected(i)"
+            v-bind:class="'date ' + (i === selected ? 'selected' : '')"
+            v-on:click="selected = i"
           >
             <p>{{ day.date }}</p>
           </span>
@@ -45,6 +45,7 @@ export default {
     activeMonth: 1,
     activeYear: 2019,
     days: [],
+    selected: 0
   }),
 
   methods: {
@@ -69,10 +70,6 @@ export default {
         this.activeMonth = 11
       }
     },
-
-    setSelected(i) {
-      Vue.set(this.days, i, { ...this.days[i], selected: true })
-    }
   },
 
   watch: {
