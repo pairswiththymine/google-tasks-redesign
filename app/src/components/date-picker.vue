@@ -21,8 +21,8 @@
           <span 
             v-for="(day, i) in days" 
             v-bind:key="i"
-            v-bind:class="'date ' + (i === selected ? 'selected' : '')"
-            v-on:click="selected = i"
+            v-bind:class="'date ' + ((day.date === selected.getDate() && activeYear === selected.getFullYear() && activeMonth === selected.getMonth()) ? 'selected' : '')"
+            v-on:click="setSelected(day.date)"
           >
             <p>{{ day.date }}</p>
           </span>
@@ -45,7 +45,7 @@ export default {
     activeMonth: 1,
     activeYear: 2019,
     days: [],
-    selected: 0
+    selected: null
   }),
   props: {
     defaultDate: Date
@@ -72,6 +72,10 @@ export default {
         this.activeMonth = 11
       }
     },
+
+    setSelected(day) {
+      this.selected = new Date(this.activeYear, this.activeMonth, day)
+    }
   },
 
   watch: {
@@ -82,7 +86,7 @@ export default {
   created() {
     this.activeMonth = this.defaultDate.getMonth()
     this.activeYear = this.defaultDate.getFullYear()
-    this.selected = this.defaultDate.getDate()
+    this.selected = this.defaultDate
     this.createDays()
   }
 }
