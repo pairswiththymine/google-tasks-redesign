@@ -21,7 +21,9 @@
           <span 
             v-for="(day, i) in days" 
             v-bind:key="i"
-            v-bind:class="'date ' + ((day.date === selected.getDate() && activeYear === selected.getFullYear() && activeMonth === selected.getMonth()) ? 'selected' : '')"
+            v-bind:class="'date ' + 
+              ((day.date === selected.getDate() && activeYear === selected.getFullYear() && activeMonth === selected.getMonth()) ? 'selected ' : '') + 
+              ((day.date === defaultDate.getDate() && activeYear === defaultDate.getFullYear() && activeMonth === defaultDate.getMonth()) ? 'original' : '')"
             v-on:click="setSelected(day.date)"
           >
             <p>{{ day.date }}</p>
@@ -229,6 +231,12 @@ export default {
       }
       .dates>span {
         cursor: pointer;
+        &.original {
+          color: $main;
+          &::after {
+            background-color: rgba($main, 0.3);
+          }
+        }
         &.selected {
           color: rgba(#fff, 0.85);
           &::after {
