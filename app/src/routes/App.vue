@@ -1,5 +1,6 @@
 <template>
   <div>
+    <date-picker></date-picker>
     <Header v-on:toggle-menu="toggleAside"/>
     <aside v-bind:class="showAside ? 'show' : 'hide'">
       <ul v-if="taskLists">
@@ -117,6 +118,7 @@ export default {
     renamingList: null,
     showAside: true,
     mainFaded: false,
+    allTasks: [],
     // hack to make img src work
     emptyState: require('../assets/empty-state.svg'),
     zeroState: require('../assets/zero-state.svg')
@@ -167,9 +169,10 @@ export default {
     getTasks() {
       api.getTasks(this.active).then(res => {
         this.mainFaded = false
+        this.allTasks = res.items || []
         if(res.items) {
-          this.activeTasks = res.items.filter(i => i.status === "needsAction")
-          this.completeTasks = res.items.filter(i => i.status === "completed")
+          this.activeTasks = res.items.filter(i => i.status === "needsAction" && !i.parent)
+          this.completeTasks = res.items.filter(i => i.status === "completed" && !i.parent)
         } else {
           this.activeTasks = []
           this.completeTasks = []
