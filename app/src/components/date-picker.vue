@@ -2,9 +2,9 @@
   <div class="date-picker">
     <div class="card">
       <header>
-         <button></button>
+        <button v-on:click="activeMonth--"><img src="../assets/left-arrow.svg"></button>
         <p>{{ new Date(activeYear, activeMonth).toLocaleString('en-us', { month: 'long' }) }}</p>
-        <button></button>
+        <button v-on:click="activeMonth++"><img src="../assets/right-arrow.svg"></button>
       </header>
       <main>
         <div class="names">
@@ -77,11 +77,6 @@ export default {
   left: 0;
   z-index: 1000000;
   font-family: $main-font;
-  header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
   .overlay {
     height: 100%;
     width: 100%;
@@ -100,6 +95,47 @@ export default {
     max-width: 300px;
     position: relative;
     padding-bottom: 64px;
+    header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      button {
+        background: transparent;
+        border-radius: 50%;
+        outline: none;
+        border: none;
+        cursor: pointer;
+        position: relative;
+        height: 32px;
+        width: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        &::after {
+          content: "";
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          height: 0;
+          width: 0;
+          opacity: 0;
+          border-radius: 50%;
+          background-color: rgba($alt-background, 0.6);
+          transition: all ease-in-out 0.2s
+        }
+        img {
+          position: relative;
+          z-index: 1;
+        }
+        &:hover::after {
+          opacity: 1;
+          top: -2px;
+          left: -2px;
+          height: 36px;
+          width: 36px;
+        }
+      }
+    }
     footer {
       bottom: 0;
       left: 0;
@@ -138,14 +174,17 @@ export default {
         margin-bottom: 4px;
         text-align: center;
         border-radius: 50%;
-        cursor: pointer;
         display: inline-flex;
         align-items: center;
         justify-content: center;
       }
+      .dates>span {
+        cursor: pointer;
+      }
       .names>span {
         color: $alt-color;
         font-weight: 500;
+        font-size: 13px;
       }
     }
   }
