@@ -85,7 +85,7 @@
           </div>
           <div v-else>
             <p v-bind:key="active">A fresh start</p>
-            <p v-bind:key="active">Anything to add?</p>
+            <p v-bind:key="active + '_'">Anything to add?</p>
           </div>
         </div>
       </div>
@@ -96,14 +96,15 @@
 <script>
 import Header from "../components/Header.vue"
 import TaskItem from "../components/task-item.vue"
+import DatePicker from "../components/date-picker.vue"
 import api from "../api.js"
-
 
 export default {
   name: "app",
   components: {
     Header,
-    TaskItem
+    TaskItem,
+    DatePicker
   },
   data: () => ({
     taskLists: null,
