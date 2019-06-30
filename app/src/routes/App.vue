@@ -1,6 +1,6 @@
 <template>
   <div>
-    <date-picker></date-picker>
+    <date-picker v-bind:defaultDate="new Date()"></date-picker>
     <Header v-on:toggle-menu="toggleAside"/>
     <aside v-bind:class="showAside ? 'show' : 'hide'">
       <ul v-if="taskLists">

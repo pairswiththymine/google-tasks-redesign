@@ -47,7 +47,9 @@ export default {
     days: [],
     selected: 0
   }),
-
+  props: {
+    defaultDate: Date
+  },
   methods: {
     createDays() {
       this.days = []
@@ -78,6 +80,9 @@ export default {
     }
   },
   created() {
+    this.activeMonth = this.defaultDate.getMonth()
+    this.activeYear = this.defaultDate.getFullYear()
+    this.selected = this.defaultDate.getDate()
     this.createDays()
   }
 }
