@@ -2,9 +2,9 @@
   <div class="date-picker">
     <div class="card">
       <header>
-        <button v-on:click="activeMonth--"><img src="../assets/left-arrow.svg"></button>
-        <p>{{ new Date(activeYear, activeMonth).toLocaleString('en-us', { month: 'long' }) }}</p>
-        <button v-on:click="activeMonth++"><img src="../assets/right-arrow.svg"></button>
+        <button v-on:click="modMonth(-1)"><img src="../assets/left-arrow.svg"></button>
+        <p>{{ new Date(activeYear, activeMonth).toLocaleString('en-us', { month: 'long' }) + " " + activeYear }}</p>
+        <button v-on:click="modMonth(1)"><img src="../assets/right-arrow.svg"></button>
       </header>
       <main>
         <div class="names">
@@ -48,6 +48,17 @@ export default {
         this.days.push({
           date: i + 1
         })
+      }
+    },
+    modMonth(i) {
+      this.activeMonth += i
+      if(this.activeMonth > 11) {
+        this.activeYear++
+        this.activeMonth = 0
+      }
+      if(this.activeMonth < 0) {
+        this.activeYear--
+        this.activeMonth = 11
       }
     }
   },
@@ -97,8 +108,12 @@ export default {
     padding-bottom: 64px;
     header {
       display: flex;
-      align-items: baseline;
+      align-items: center;
       justify-content: space-between;
+      padding: 8px 2px 12px;
+      p {
+        margin: 0;
+      }
       button {
         background: transparent;
         border-radius: 50%;
