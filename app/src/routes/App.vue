@@ -73,8 +73,9 @@
           />
         </div>
         <div 
-          v-if="!shownTasks.length"
-          v-bind:class="'bg' + (!shownTasks.length ? ' show' : '')"
+          v-if="shownTasks.length === 0"
+          v-bind:key="active"
+          v-bind:class="'bg ' + (shownTasks.length === 0 ? 'show' : '')"
         >
           <img :src="((!activeTasks.length && completeTasks.length) ? emptyState : zeroState)" />
           <!-- intentionally seperated for fade in animation -->
@@ -83,8 +84,8 @@
             <p>You've finished all your tasks. Take a second to recharge</p>
           </div>
           <div v-else>
-            <p>A fresh start</p>
-            <p>Anything to add?</p>
+            <p v-bind:key="active">A fresh start</p>
+            <p v-bind:key="active">Anything to add?</p>
           </div>
         </div>
       </div>
@@ -156,9 +157,11 @@ export default {
       })
     },
     setActiveList(id) {
-      this.mainFaded = true
-      this.active = id
-      this.getTasks()
+      if(this.active !== id) {
+        this.mainFaded = true
+        this.active = id
+        this.getTasks()
+      }
     },
     getTasks() {
       api.getTasks(this.active).then(res => {
