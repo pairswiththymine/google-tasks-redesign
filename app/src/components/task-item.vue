@@ -21,7 +21,13 @@
             src="../assets/expand.svg">
         </button>
     </div>
-    <p v-if="task.due">{{ task.due }}</p>
+    <div v-if="task.due">
+      <p v-on:click="datePick = true">{{ task.due }}</p>
+      <date-picker 
+        v-if="datePick"
+        v-bind:defaultDate="new Date(task.due)"
+        v-on:cancel="datePick = false"></date-picker>
+    </div>
     <p v-if="!expanded" class="notes">{{ shownNotes }}</p>
     <textarea 
       ref="notesArea"
@@ -38,8 +44,13 @@
 <script>
 import api from "../api.js"
 
+import DatePicker from "./date-picker.vue"
+
 export default {
   name: "task-item",
+  components: {
+    DatePicker
+  },
   props: {
     task: Object,
     listId: String
@@ -49,7 +60,8 @@ export default {
     newNotes: "",
     newTitle: "",
     completed: false,
-    hide: false
+    hide: false,
+    datePick: false
   }),
   mounted() {
     this.newNotes = this.task.notes
@@ -77,7 +89,7 @@ export default {
         this.saveNewNote()
         this.$emit("toggle-complete", this.completed)
         this.hide = false
-      }, 500)
+      }, 300)
     }
   },
   watch: {

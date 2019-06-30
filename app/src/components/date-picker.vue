@@ -31,11 +31,11 @@
         </div>
       </main>
       <footer>
-        <button>Cancel</button>
+        <button v-on:click="$emit('cancel')">Cancel</button>
         <button>OK</button>
       </footer>
     </div>
-    <div class="overlay"></div>
+    <div class="overlay" v-on:click="$emit('cancel')"></div>
   </div>
 </template>
 

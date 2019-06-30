@@ -1,6 +1,5 @@
 <template>
   <div>
-    <date-picker v-bind:defaultDate="new Date()"></date-picker>
     <Header v-on:toggle-menu="toggleAside"/>
     <aside v-bind:class="showAside ? 'show' : 'hide'">
       <ul v-if="taskLists">
@@ -97,7 +96,6 @@
 <script>
 import Header from "../components/Header.vue"
 import TaskItem from "../components/task-item.vue"
-import DatePicker from "../components/date-picker.vue"
 import api from "../api.js"
 
 export default {
@@ -105,7 +103,6 @@ export default {
   components: {
     Header,
     TaskItem,
-    DatePicker
   },
   data: () => ({
     taskLists: null,
