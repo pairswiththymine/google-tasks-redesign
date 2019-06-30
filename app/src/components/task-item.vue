@@ -21,11 +21,11 @@
             src="../assets/expand.svg">
         </button>
     </div>
-    <div v-if="task.due">
-      <p v-on:click="datePick = true">{{ task.due }}</p>
+    <div v-if="this.newDue">
+      <button v-on:click="datePick = true" class="date">{{ this.formatDate(this.newDue) }}</button>
       <date-picker 
         v-if="datePick"
-        v-bind:defaultDate="new Date(task.due)"
+        v-bind:defaultDate="new Date(this.newDue)"
         v-on:change="handleDateChange"
         v-on:cancel="datePick = false"></date-picker>
     </div>
@@ -71,9 +71,16 @@ export default {
     this.newDue = this.task.due
   },
   methods: {
+    formatDate(input) {
+      let date = input
+      if(typeof input === "string") date = new Date(input)
+      
+      return date.toLocaleString("en-us", {weekday: "short"}) + ", "  + date.toLocaleString('en-us', { month: 'long' }) + " " + date.getDate()
+    },
     handleDateChange(newDate) {
       this.newDue = newDate
       this.saveNewNote()
+      this.datePick = false
     },
     resizeArea(e) {
       setTimeout(() => {
@@ -213,6 +220,24 @@ export default {
     border-radius: 2px;
     &:focus {
       border-bottom: 2px solid $main;
+    }
+  }
+
+  button.date {
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 6px 8px;
+    cursor: pointer;
+    background-color: $alt-background;
+    color: $alt-color;
+    letter-spacing: 0.02rem;
+    font-size: 1.02;
+    border-radius: 2px;
+    transition: 0.2s ease-in-out all;
+    &:hover {
+      box-shadow: 0 1px 2px 0 rgba(60,64,67,0.302), 0 1px 3px 1px rgba(60,64,67,0.149);
+      background-color: #fff;
     }
   }
   
