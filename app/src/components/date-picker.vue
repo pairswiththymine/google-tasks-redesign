@@ -32,7 +32,7 @@
       </main>
       <footer>
         <button v-on:click="$emit('cancel')">Cancel</button>
-        <button>OK</button>
+        <button v-on:click="$emit('change', selected.toISOString())">OK</button>
       </footer>
     </div>
     <div class="overlay" v-on:click="$emit('cancel')"></div>

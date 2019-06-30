@@ -26,6 +26,7 @@
       <date-picker 
         v-if="datePick"
         v-bind:defaultDate="new Date(task.due)"
+        v-on:change="handleDateChange"
         v-on:cancel="datePick = false"></date-picker>
     </div>
     <p v-if="!expanded" class="notes">{{ shownNotes }}</p>
@@ -67,8 +68,13 @@ export default {
     this.newNotes = this.task.notes
     this.newTitle = this.task.title
     this.completed = this.task.status === 'completed'
+    this.newDue = this.task.due
   },
   methods: {
+    handleDateChange(newDate) {
+      this.newDue = newDate
+      this.saveNewNote()
+    },
     resizeArea(e) {
       setTimeout(() => {
         e.target.style.cssText = "height: auto; padding: 0"
@@ -79,7 +85,8 @@ export default {
       api.updateTask(this.task.id, this.listId, {
         title: this.newTitle,
         notes: this.newNotes,
-        status: this.completed ? "completed" : "needsAction"
+        status: this.completed ? "completed" : "needsAction",
+        due: this.newDue
       })
     },
     toggleComplete() {
