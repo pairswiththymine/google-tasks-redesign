@@ -18,8 +18,13 @@
         </div>
         <div class="dates">
           <div v-bind:style="'width: calc(100% / 7 * ' + new Date(activeYear, activeMonth).getDay() + ')'"></div>
-          <span v-for="(day, i) in days" v-bind:key="i" class="date">
-            {{ day.date }}
+          <span 
+            v-for="(day, i) in days" 
+            v-bind:key="i"
+            v-bind:class="'date ' + (day.selected ? 'selected' : '')"
+            v-on:click="setSelected(i)"
+          >
+            <p>{{ day.date }}</p>
           </span>
         </div>
       </main>
@@ -33,11 +38,13 @@
 </template>
 
 <script>
+import Vue from "vue"
+
 export default {
   data: () => ({
     activeMonth: 1,
     activeYear: 2019,
-    days: []
+    days: [],
   }),
 
   methods: {
@@ -46,10 +53,11 @@ export default {
       const lastDay = new Date(2019, this.activeMonth + 1, 0)
       for(let i = 0; i < lastDay.getDate(); i++) {
         this.days.push({
-          date: i + 1
+          date: i + 1,
         })
       }
     },
+    
     modMonth(i) {
       this.activeMonth += i
       if(this.activeMonth > 11) {
@@ -60,6 +68,10 @@ export default {
         this.activeYear--
         this.activeMonth = 11
       }
+    },
+
+    setSelected(i) {
+      Vue.set(this.days, i, { ...this.days[i], selected: true })
     }
   },
 
@@ -184,17 +196,39 @@ export default {
       }
       span {
         font-size: 12px;
-        height: 32px;
         width: calc(100% / 7);
         margin-bottom: 4px;
-        text-align: center;
+        height: 32px;
         border-radius: 50%;
         display: inline-flex;
         align-items: center;
         justify-content: center;
+        position: relative;
+        p {
+          position: relative;
+          z-index: 1;
+          width: 100%;
+          text-align: center;
+        }
+        &::after {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: calc(50% - 16px);
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          z-index: 0;
+        }
       }
       .dates>span {
         cursor: pointer;
+        &.selected {
+          color: rgba(#fff, 0.85);
+          &::after {
+            background-color: $main;
+          }
+        }
       }
       .names>span {
         color: $alt-color;
