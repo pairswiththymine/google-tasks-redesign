@@ -232,7 +232,7 @@ export default {
     background-color: $alt-background;
     color: $alt-color;
     letter-spacing: 0.02rem;
-    font-size: 1.02;
+    font-size: 0.9rem;
     border-radius: 2px;
     transition: 0.2s ease-in-out all;
     &:hover {

@@ -73,7 +73,7 @@
           />
         </div>
         <div 
-          v-if="shownTasks.length === 0"
+          v-if="shownTasks && shownTasks.length === 0"
           v-bind:key="active"
           v-bind:class="'bg ' + (shownTasks.length === 0 ? 'show' : '')"
         >
@@ -111,7 +111,7 @@ export default {
     completeTasks: [],
     showActive: true,
     showCompleted: false,
-    shownTasks: [],
+    shownTasks: null,
     renamingList: null,
     showAside: true,
     mainFaded: false,
