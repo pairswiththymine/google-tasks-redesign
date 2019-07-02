@@ -21,11 +21,12 @@
             src="../assets/expand.svg">
         </button>
     </div>
-    <div v-if="this.newDue">
-      <button v-on:click="datePick = true" class="date">{{ this.formatDate(this.newDue) }}</button>
+    <div class="due">
+      <button v-if="this.newDue" v-on:click="datePick = true" class="date">{{ this.formatDate(this.newDue) }}</button>
+      <button v-else-if="this.expanded" class="date" v-on:click="datePick = true">Add date/time</button>
       <date-picker 
         v-if="datePick"
-        v-bind:defaultDate="new Date(this.newDue)"
+        v-bind:defaultDate="this.newDue ? new Date(this.newDue) : new Date()"
         v-on:change="handleDateChange"
         v-on:cancel="datePick = false"></date-picker>
     </div>
@@ -136,6 +137,7 @@ export default {
   height: auto;
   opacity: 1;
   &.hide {
+    pointer-events: none;
     max-height: 0;
     padding: 0 24px;
     opacity: 0;
@@ -229,13 +231,15 @@ export default {
     outline: none;
     padding: 6px 8px;
     cursor: pointer;
-    background-color: $alt-background;
+    background-color: rgba($alt-background, 0.3);
+    border: 1px solid $alt-background;
     color: $alt-color;
     letter-spacing: 0.02rem;
     font-size: 0.9rem;
-    border-radius: 2px;
+    border-radius: 4px;
     transition: 0.2s ease-in-out all;
     &:hover {
+      border: 1px solid transparent;  
       box-shadow: 0 1px 2px 0 rgba(60,64,67,0.302), 0 1px 3px 1px rgba(60,64,67,0.149);
       background-color: #fff;
     }
