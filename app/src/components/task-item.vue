@@ -63,6 +63,7 @@ export default {
     newNotes: "",
     newTitle: "",
     completed: false,
+    newDue: null,
     hide: false,
     datePick: false
   }),
@@ -102,7 +103,7 @@ export default {
     toggleComplete() {
       this.completed = !this.completed
       this.hide = true
-      setTimeout(() => {
+      setTimeout(() => { // for the animation to complete
         this.saveNewNote()
         this.$emit("toggle-complete", this.completed)
         this.hide = false
