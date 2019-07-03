@@ -1,5 +1,7 @@
 <template>
-  <div v-bind:class="'task ' + (expanded ? 'expanded' : 'not-expanded') + (hide ? ' hide' : '')">
+  <div 
+    v-bind:class="'task ' + (expanded ? 'expanded' : 'not-expanded') + (hide ? ' hide' : '') + (subtask ? ' subtask' : '')"
+  >
     <div v-bind:class="'title-bar ' + (this.completed ? 'completed' : '')">
       <button 
         class="complete"
@@ -41,6 +43,19 @@
       v-model="newNotes" 
       v-on:blur="saveNewNote"
       class="notes"></textarea>
+    <div v-if="task.subtasks && !task.parent">
+      <p>Subtasks</p>
+      <task-item 
+        v-for="subtask in task.subtasks"
+        v-bind:key="subtask.id"
+        v-bind:task="subtask"
+        v-bind:subtask="true"
+        v-bind:listId="listId"
+      ></task-item>
+    </div>
+
+    <div v-if="task.loading" class="loading"></div>
+  
   </div>
 </template>
 
@@ -56,7 +71,8 @@ export default {
   },
   props: {
     task: Object,
-    listId: String
+    listId: String,
+    subtask: Boolean
   },
   data: () => ({
     expanded: false,
@@ -69,7 +85,7 @@ export default {
   }),
   mounted() {
     this.newNotes = this.task.notes
-    this.newTitle = this.task.title
+    this.newTitle = this.task.loading ? "creating task" : this.task.title
     this.completed = this.task.status === 'completed'
     this.newDue = this.task.due
   },
@@ -92,8 +108,7 @@ export default {
       }, 0) // delay to get new text
     },
     saveNewNote() {
-      console.log("saving")
-      api.updateTask(this.task.id, this.listId, {
+      return api.updateTask(this.task.id, this.listId, {
         title: this.newTitle,
         notes: this.newNotes,
         status: this.completed ? "completed" : "needsAction",
@@ -103,11 +118,13 @@ export default {
     toggleComplete() {
       this.completed = !this.completed
       this.hide = true
-      setTimeout(() => { // for the animation to complete
-        this.saveNewNote()
-        this.$emit("toggle-complete", this.completed)
-        this.hide = false
-      }, 300)
+      const sT = new Date().getTime()
+      this.saveNewNote().then(res => {
+        setTimeout(() => { // wait for the animation to complete
+          this.$emit("toggle-complete", this.completed)
+          this.hide = false
+        }, Math.max(new Date().getTime() - sT - 300, 0))
+      })
     }
   },
   watch: {
@@ -126,6 +143,21 @@ export default {
 <style lang="scss" scoped>
 @import "../_style.scss";
 
+@keyframes pulsar {
+  0% {
+    width: 0;
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+    width: 200%;
+  }
+  100% {
+    opacity: 0;
+    width: 200%;
+  }
+}
+
 .task {
   border: 1px solid $alt-background;
   border-radius: 8px;
@@ -136,9 +168,37 @@ export default {
               padding ease-out 0.5s,
               opacity ease-out 0.5s;
   overflow: hidden;
-  max-height: 500px;
   height: auto;
   opacity: 1;
+  position: relative;
+
+  .loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-top-right-radius: 5000px;
+    border-bottom-right-radius: 5000px;
+    height: 100%;
+    width: 0;
+    background-color: rgba($main, 0.3);
+    animation: pulsar 1.3s ease-in-out infinite;
+  }
+
+  &.subtask {
+    margin: 8px 0;
+    padding: 4px 12px;
+    border: none;
+    &:hover {
+      box-shadow: none;
+    }
+    .title-bar {
+      align-items: center;
+    }
+    input.title {
+      font-size: 1.1rem;
+      margin: 0;
+    }
+  }
   &.hide {
     pointer-events: none;
     max-height: 0;

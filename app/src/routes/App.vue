@@ -125,14 +125,15 @@ export default {
       if(newVal) { // if not completed -> completed
         const index = this.activeTasks.findIndex(t => id === t.id)
         const task = this.activeTasks.splice(index, 1)
-        task.completed = newVal ? "completed" : "needsAction"
+        task.completed ="completed"
         this.completeTasks.push(task[0])
       } else { // if completed -> not completed
         const index = this.completeTasks.findIndex(t => id === t.id)
         const task = this.completeTasks.splice(index, 1)
-        task.completed = newVal ? "completed" : "needsAction"
+        task.completed = "needsAction"
         this.activeTasks.push(task[0])
       }
+      this.getTasks()
       this.getShownTasks()
     },
     toggleAside() { this.showAside = !this.showAside },
@@ -165,11 +166,24 @@ export default {
     },
     getTasks() {
       api.getTasks(this.active).then(res => {
+        this.activeTasks = []
+        this.completeTasks = []
         this.mainFaded = false
         this.allTasks = res.items || []
+        let tasks = {}
+        let subTasks = []
         if(res.items) {
-          this.activeTasks = res.items.filter(i => i.status === "needsAction" && !i.parent)
-          this.completeTasks = res.items.filter(i => i.status === "completed" && !i.parent)
+          res.items.forEach(task => {
+            tasks[task.id] = { ...task, subtasks: [] }
+          })
+
+          for(let task in tasks) {
+            if(tasks[task].parent) tasks[tasks[task].parent].subtasks.push(tasks[task])
+            else {
+              if(tasks[task].status === "needsAction") this.activeTasks.push(tasks[task])
+              else if(tasks[task].status === "completed") this.completeTasks.push(tasks[task]) 
+            }
+          }
         } else {
           this.activeTasks = []
           this.completeTasks = []
@@ -187,7 +201,8 @@ export default {
     },
     addTask(e) {
       const task = {
-        title: e.target.value
+        title: e.target.value,
+        loading: true
       }
       e.target.value = ""
       e.target.blur()
