@@ -13,6 +13,7 @@
         class="title" 
         v-bind:disabled="!expanded" 
         v-on:blur="saveNewNote"
+        v-bind:placeholder="expanded ? 'Enter Title' : ''"
         v-model="newTitle" />
         <button class="expand">
           <img 
@@ -90,6 +91,7 @@ export default {
       }, 0) // delay to get new text
     },
     saveNewNote() {
+      console.log("saving")
       api.updateTask(this.task.id, this.listId, {
         title: this.newTitle,
         notes: this.newNotes,
@@ -112,9 +114,9 @@ export default {
   },
   computed: {
     shownNotes() {
-      if(!this.task.notes) return ""
-      if(this.expanded || this.task.notes.length < 100) return this.task.notes
-      return this.task.notes.substring(0, this.task.notes.indexOf(" ", 90)) + "..."
+      if(!this.newNotes) return ""
+      if(this.expanded || this.newNotes.length < 100) return this.newNotes
+      return this.newNotes.substring(0, this.newNotes.indexOf(" ", 90)) + "..."
     }
   }
 }
