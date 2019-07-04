@@ -68,9 +68,10 @@
             v-for="task in shownTasks"
             v-bind:key="task.id"
             v-bind:task="task"
-            v-on:reload-tasks="() => getTasks()"
+            v-on:reload-tasks="(e) => reloadTasks(e)"
             v-bind:listId="active"
             v-on:toggle-complete="val => toggleComplete(task.id, val)"
+            v-bind:expanded="task.id === focused"
           />
         </div>
         <div 
@@ -117,6 +118,7 @@ export default {
     showAside: true,
     mainFaded: false,
     allTasks: [],
+    focused: null,
     // hack to make img src work
     emptyState: require('../assets/empty-state.svg'),
     zeroState: require('../assets/zero-state.svg')
@@ -165,7 +167,10 @@ export default {
         this.getTasks()
       }
     },
-    getTasks() {
+    reloadTasks(prevState) {
+      this.getTasks(() => this.focused = prevState.id)
+    },
+    getTasks(cb) {
       api.getTasks(this.active).then(res => {
         this.activeTasks = []
         this.completeTasks = []
@@ -188,6 +193,7 @@ export default {
           this.activeTasks = []
           this.completeTasks = []
         }
+        cb && cb()
         this.getShownTasks()
       }).catch(res => {
         this.mainFaded = false
@@ -436,6 +442,7 @@ main {
     margin: 0 auto;
     padding-top: 8px;
     display: grid;
+    align-items: baseline;
     grid-template-columns: 50% 50%;
     @media only screen and (max-width: 1100px) {
       grid-template-columns: 100%;

@@ -1,6 +1,6 @@
 <template>
   <div 
-    v-bind:class="'task ' + (expanded ? 'expanded' : 'not-expanded') + (hide ? ' hide' : '') + (subtask ? ' subtask' : '')"
+    v-bind:class="'task ' + (open ? 'expanded' : 'not-expanded') + (hide ? ' hide' : '') + (subtask ? ' subtask' : '')"
   >
     <div v-bind:class="'title-bar ' + (this.completed ? 'completed' : '')">
       <button 
@@ -13,14 +13,14 @@
       </button>
       <input 
         class="title" 
-        v-bind:disabled="!expanded && !task.parent" 
+        v-bind:disabled="!open && !task.parent" 
         v-on:blur="saveNewNote"
-        v-bind:placeholder="expanded ? 'Enter Title' : ''"
+        v-bind:placeholder="open ? 'Enter Title' : ''"
         v-model="newTitle" />
         <button class="expand" v-if="!task.loading && !task.parent">
           <img 
-            v-on:click="expanded = !expanded"
-            v-bind:class="expanded ? 'up' : 'down'"
+            v-on:click="open = !open"
+            v-bind:class="open ? 'up' : 'down'"
             src="../assets/expand.svg">
         </button>
     </div>
@@ -33,7 +33,7 @@
         v-on:change="handleDateChange"
         v-on:cancel="datePick = false"></date-picker>
     </div>
-    <p v-if="!expanded" class="notes">{{ shownNotes }}</p>
+    <p v-if="!open" class="notes">{{ shownNotes }}</p>
     <textarea 
       ref="notesArea"
       v-else
@@ -50,12 +50,11 @@
         v-bind:key="subtask.id"
         v-bind:task="subtask"
         v-bind:subtask="true"
-        v-bind:expanded="expanded"
+        v-bind:expanded="open"
         v-bind:listId="listId"
       ></task-item>
     </div>
-    <button v-if="expanded && !task.parent" class="add-subtask" v-on:click="addSubtask">Add subtasks</button>
-
+    <button v-if="open && !task.parent" class="add-subtask" v-on:click="addSubtask">Add subtasks</button>
     <div v-if="task.loading" class="loading"></div>
   
   </div>
@@ -81,6 +80,7 @@ export default {
     }
   },
   data: () => ({
+    open: false,
     newNotes: "",
     newTitle: "",
     completed: false,
@@ -93,6 +93,7 @@ export default {
     this.newTitle = this.task.loading ? "creating task" : this.task.title
     this.completed = this.task.status === 'completed'
     this.newDue = this.task.due
+    this.open = this.expanded
   },
   methods: {
     formatDate(input) {
@@ -140,7 +141,7 @@ export default {
       }
       this.task.subtasks.push(task)
       api.createTask(this.listId, task).then(res => {
-        this.$emit("reload-tasks")
+        this.$emit("reload-tasks", this.task.id)
       })
     }
   },
