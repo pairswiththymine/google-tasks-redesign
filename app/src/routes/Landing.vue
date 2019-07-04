@@ -23,7 +23,6 @@ export default {
   methods: {
     auth() {
       api.auth().then(res => {
-        console.log(res)
         this.$router.push("app")
       })      
     }
