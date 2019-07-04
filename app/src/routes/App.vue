@@ -68,6 +68,7 @@
             v-for="task in shownTasks"
             v-bind:key="task.id"
             v-bind:task="task"
+            v-on:reload-tasks="() => getTasks()"
             v-bind:listId="active"
             v-on:toggle-complete="val => toggleComplete(task.id, val)"
           />
@@ -171,7 +172,6 @@ export default {
         this.mainFaded = false
         this.allTasks = res.items || []
         let tasks = {}
-        let subTasks = []
         if(res.items) {
           res.items.forEach(task => {
             tasks[task.id] = { ...task, subtasks: [] }

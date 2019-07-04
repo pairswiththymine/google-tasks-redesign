@@ -13,11 +13,11 @@
       </button>
       <input 
         class="title" 
-        v-bind:disabled="!expanded" 
+        v-bind:disabled="!expanded && !task.parent" 
         v-on:blur="saveNewNote"
         v-bind:placeholder="expanded ? 'Enter Title' : ''"
         v-model="newTitle" />
-        <button class="expand">
+        <button class="expand" v-if="!task.loading">
           <img 
             v-on:click="expanded = !expanded"
             v-bind:class="expanded ? 'up' : 'down'"
@@ -43,7 +43,7 @@
       v-model="newNotes" 
       v-on:blur="saveNewNote"
       class="notes"></textarea>
-    <div v-if="task.subtasks && !task.parent">
+    <div v-if="task.subtasks && task.subtasks.length && !task.parent">
       <p>Subtasks</p>
       <task-item 
         v-for="subtask in task.subtasks"
@@ -53,6 +53,7 @@
         v-bind:listId="listId"
       ></task-item>
     </div>
+    <button v-if="expanded && !task.parent" class="add-subtask" v-on:click="addSubtask">Add subtasks</button>
 
     <div v-if="task.loading" class="loading"></div>
   
@@ -117,13 +118,25 @@ export default {
     },
     toggleComplete() {
       this.completed = !this.completed
-      this.hide = true
-      const sT = new Date().getTime()
+      if(!this.task.parent) {
+        this.hide = true
+      } 
       this.saveNewNote().then(res => {
         setTimeout(() => { // wait for the animation to complete
           this.$emit("toggle-complete", this.completed)
           this.hide = false
-        }, Math.max(new Date().getTime() - sT - 300, 0))
+        }, 500)
+      })
+    },
+    addSubtask() {
+      const task = {
+        title: "subtask",
+        parent: this.task.id,
+        loading: true,
+      }
+      this.task.subtasks.push(task)
+      api.createTask(this.listId, task).then(res => {
+        this.$emit("reload-tasks")
       })
     }
   },
@@ -166,7 +179,9 @@ export default {
   transition: box-shadow ease-in-out 0.2s, 
               max-height ease-out 0.5s,
               padding ease-out 0.5s,
-              opacity ease-out 0.5s;
+              opacity ease-out 0.5s,
+              margin ease-out 0.5s,
+              border ease-out 0.5s;
   overflow: hidden;
   height: auto;
   opacity: 1;
@@ -204,6 +219,8 @@ export default {
     max-height: 0;
     padding: 0 24px;
     opacity: 0;
+    margin: 0 8px;
+    border: 0px solid transparent;
   }
   &.not-expanded { cursor: pointer; }
   &:hover {
@@ -288,7 +305,7 @@ export default {
     }
   }
 
-  button.date {
+  button.date, button.add-subtask {
     background: transparent;
     border: none;
     outline: none;
@@ -306,6 +323,7 @@ export default {
       box-shadow: 0 1px 2px 0 rgba(60,64,67,0.302), 0 1px 3px 1px rgba(60,64,67,0.149);
       background-color: #fff;
     }
+    margin: 2px 0 8px;
   }
   
   .notes {
