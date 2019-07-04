@@ -17,7 +17,7 @@
         v-on:blur="saveNewNote"
         v-bind:placeholder="expanded ? 'Enter Title' : ''"
         v-model="newTitle" />
-        <button class="expand" v-if="!task.loading">
+        <button class="expand" v-if="!task.loading && !task.parent">
           <img 
             v-on:click="expanded = !expanded"
             v-bind:class="expanded ? 'up' : 'down'"
@@ -50,6 +50,7 @@
         v-bind:key="subtask.id"
         v-bind:task="subtask"
         v-bind:subtask="true"
+        v-bind:expanded="expanded"
         v-bind:listId="listId"
       ></task-item>
     </div>
@@ -73,10 +74,13 @@ export default {
   props: {
     task: Object,
     listId: String,
-    subtask: Boolean
+    subtask: Boolean,
+    expanded: {
+      type: Boolean,
+      defaultValue: false
+    }
   },
   data: () => ({
-    expanded: false,
     newNotes: "",
     newTitle: "",
     completed: false,
@@ -186,18 +190,6 @@ export default {
   height: auto;
   opacity: 1;
   position: relative;
-
-  .loading {
-    position: absolute;
-    top: 0;
-    left: 0;
-    border-top-right-radius: 5000px;
-    border-bottom-right-radius: 5000px;
-    height: 100%;
-    width: 0;
-    background-color: rgba($main, 0.3);
-    animation: pulsar 1.3s ease-in-out infinite;
-  }
 
   &.subtask {
     margin: 8px 0;
@@ -324,6 +316,18 @@ export default {
       background-color: #fff;
     }
     margin: 2px 0 8px;
+  }
+
+  .loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-top-right-radius: 5000px;
+    border-bottom-right-radius: 5000px;
+    height: 100%;
+    width: 0;
+    background-color: rgba($main, 0.3);
+    animation: pulsar 1.3s ease-in-out infinite;
   }
   
   .notes {
