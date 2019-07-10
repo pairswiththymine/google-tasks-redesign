@@ -5,8 +5,10 @@
 const SCOPE = ['https://www.googleapis.com/auth/tasks']
 
 const api = {
-  init() {
-    return gapi.client.load("tasks")
+  async init() {
+    await gapi.load("client", {
+      callback: () => gapi.client.load("tasks")
+    })
   },
 
   auth() {
