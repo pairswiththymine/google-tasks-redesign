@@ -26,3 +26,7 @@ const app = new Vue({
 window.handleGoogleApiLoaded = () => {
   app.$mount('#app')
 }
+
+// hack because gapi with browser caching is weird
+// eslint-disable-next-line
+if(gapi) window.handleGoogleApiLoaded()
