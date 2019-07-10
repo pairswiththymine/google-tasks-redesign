@@ -105,6 +105,4 @@ const api = {
   }
 }
 
-window.api = api
-
 export default api

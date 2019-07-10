@@ -47,7 +47,7 @@
       <p>Subtasks</p>
       <task-item 
         v-for="subtask in task.subtasks"
-        v-bind:key="subtask.id"
+        v-bind:key="subtask.id + open"
         v-bind:task="subtask"
         v-bind:subtask="true"
         v-bind:expanded="open"

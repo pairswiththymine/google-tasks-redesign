@@ -103,4 +103,19 @@ I could just leave it here, this helped my design skills quite a bit and I am ve
 
 ### Tech stack
 
-Typically I would use react for this kind of thing because it is simple, easy, and I already know it. ~~However because I am doing this as though I am a Google engineer I will instead be using [polymer](https://www.polymer-project.org/). A technology I have never used before and only know by name and that Google uses it.~~ Actually I am just going to use vue because I want to actually make this.
+Typically I would use react for this kind of thing because it is simple, easy, and I already know it. ~~However because I am doing this as though I am a Google engineer I will instead be using [polymer](https://www.polymer-project.org/). A technology I have never used before and only know by name and that Google uses it.~~ Actually I am just going to use vue because I want to actually make this, and while I do intend to learn polymer at some point, I do not believe this is the project to do it. Instead I will be using [vue](https://vuejs.org/) because I still don't really know it that well, but I am at least familiar with it.
+
+---
+
+# Creating the App
+
+Actually documenting every step I took would be very demanding and because most of you are probably skimming (hi if you actually read this!), I don't believe this would be worth the time it would take. Instead here are some problems that cropped up and how I fixed them.
+
+## Design challenges
+
+The first challenge that I ran into was the landing page. This needs to convey:
+    - 1 this is not an application made by Google
+    - 2 this was made by me
+    - 3 some kind of how I did it section
+The first one was simple enough, add a disclaimer and link to the source code, however the other two were interesting, I had the option of either linking to the github readme, or to a dedicated site about this. In the end I decided to link to my website because it states that I made it without interupting the Google aesthetic I was going for. Add a simple loading animation, and some nice art (lifted from the tasks webapp) an it was done.
+

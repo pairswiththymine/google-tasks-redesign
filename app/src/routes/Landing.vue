@@ -9,14 +9,13 @@
       </div>  
     </div>
     <div class="img"></div>
-    <p class="disclaimer">This application is not made, or endorsed by Google.</p>
+    <p class="disclaimer">This application is not made, or endorsed by Google. All images, and fonts are property of Google</p>
   </div>
 </template>
 
 <script>
 
 import api from "../api.js"
-window.api = api
 
 export default {
   name: "Landing",
